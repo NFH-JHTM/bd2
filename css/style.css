@@ -1,0 +1,90 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', sans-serif;
+  background: #fffbe9;
+  overflow: hidden;
+}
+
+.gift {
+  font-size: 120px;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.4s;
+}
+
+.bounce {
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -55%) scale(1.1); }
+}
+
+.popup, .minigame {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff0f5;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.popup .buttons button {
+  margin: 10px;
+  padding: 10px 25px;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background-color: #ffc0cb;
+  transition: 0.3s;
+}
+
+.question-mark {
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 50px);
+  gap: 10px;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.number-grid button {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: #ffecec;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.hidden {
+  display: none;
+}
+
+.petalCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
