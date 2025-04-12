@@ -51,8 +51,9 @@ yesBtn.addEventListener("touchstart", () => {
 function moveYesButton() {
   attempts++;
 
-  const safeX = Math.min(window.innerWidth - 150, Math.random() * (window.innerWidth - 100));
-  const safeY = Math.min(window.innerHeight - 100, Math.random() * (window.innerHeight - 100));
+  // Tính toán giới hạn an toàn cho nút
+  const safeX = Math.min(window.innerWidth - yesBtn.offsetWidth, Math.random() * (window.innerWidth - yesBtn.offsetWidth));
+  const safeY = Math.min(window.innerHeight - yesBtn.offsetHeight, Math.random() * (window.innerHeight - yesBtn.offsetHeight));
 
   yesBtn.style.position = "absolute";
   yesBtn.style.left = safeX + "px";
@@ -139,6 +140,17 @@ function handleWrong() {
     questionMark.classList.remove("hidden");
     wrongAttempts = 0;
   }
+
+  // Reset lại popup và trạng thái minigame
+  setTimeout(() => {
+    popup.classList.add("hidden");
+    minigame.classList.add("hidden");
+    yesBtn.style.position = "static"; // Đặt lại vị trí nút
+    yesBtn.textContent = "yessss"; // Đặt lại text nút
+    noBtn.textContent = "naur"; // Đặt lại text nút
+    attempts = 0; // Reset lại số lần thử
+    resultText.textContent = ""; // Xóa kết quả
+  }, 1000); // delay để người chơi nhìn kết quả sai trước khi popup ẩn đi
 }
 
 // 🔽 Thu nhỏ/hiện lại minigame + random lại số
