@@ -51,15 +51,13 @@ yesBtn.addEventListener("touchstart", () => {
 function moveYesButton() {
   attempts++;
 
-  // Tính toán giới hạn an toàn cho nút
-  const safeX = Math.min(
-    window.innerWidth - yesBtn.offsetWidth - 10, 
-    Math.max(0, Math.random() * (window.innerWidth - yesBtn.offsetWidth))
-  );
-  const safeY = Math.min(
-    window.innerHeight - yesBtn.offsetHeight - 10, 
-    Math.max(0, Math.random() * (window.innerHeight - yesBtn.offsetHeight))
-  );
+  // Giới hạn phạm vi di chuyển của nút `yes` nhỏ hơn một chút
+  const margin = 50;  // Cách cạnh màn hình một khoảng nhỏ
+  const maxX = window.innerWidth - yesBtn.offsetWidth - margin;
+  const maxY = window.innerHeight - yesBtn.offsetHeight - margin;
+
+  const safeX = Math.min(maxX, Math.max(margin, Math.random() * maxX));
+  const safeY = Math.min(maxY, Math.max(margin, Math.random() * maxY));
 
   yesBtn.style.position = "absolute";
   yesBtn.style.left = `${safeX}px`;
@@ -73,6 +71,7 @@ function moveYesButton() {
     questionMark.classList.remove("hidden");
   }
 }
+
 
 function updateButtonText() {
   if (attempts < phrasesYes.length) {
