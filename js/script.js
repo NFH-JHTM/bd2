@@ -18,6 +18,11 @@ giftBox.addEventListener("click", () => {
   popup.classList.remove("hidden");
 });
 
+// ❌ Nút no sẽ đóng popup
+noBtn.addEventListener("click", () => {
+  popup.classList.add("hidden");
+});
+
 // Troll nút yesBtn
 yesBtn.addEventListener("mouseenter", moveYesButton);
 yesBtn.addEventListener("touchstart", moveYesButton);
@@ -101,6 +106,8 @@ function showBirthdayMessage() {
   msg.style.padding = "30px";
   msg.style.borderRadius = "20px";
   msg.style.fontSize = "1.4rem";
+  msg.style.maxWidth = "80vw";
+  msg.style.wordBreak = "break-word";
   msg.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
   msg.style.zIndex = 999;
   document.body.appendChild(msg);
