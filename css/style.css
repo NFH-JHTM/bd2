@@ -110,3 +110,27 @@ body {
 body, button, p, h1, h2, h3 {
   font-family: 'Itim', cursive;
 }
+
+.minigame {
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.minigame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  background: #ffc1e3;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: move;
+}
+
+#closeMinigame {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
