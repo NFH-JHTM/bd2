@@ -91,3 +91,22 @@ body {
   pointer-events: none;
   z-index: 0;
 }
+
+.popup {
+  animation: scaleIn 0.4s ease;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.6) translate(-50%, -50%);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+body, button, p, h1, h2, h3 {
+  font-family: 'Itim', cursive;
+}
