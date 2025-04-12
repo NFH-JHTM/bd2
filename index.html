@@ -1,19 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Robot Home</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎁 Hộp quà bí ẩn</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div class="container">
-    <div id="gate" class="gate"></div>
-    <div id="robot" class="robot">
-      <div id="chatBubble" class="chat-bubble"></div>
+
+  <!-- 🎁 Hộp quà chính -->
+  <div class="gift bounce" id="giftBox">🎁</div>
+
+  <!-- ❓ Popup xác nhận -->
+  <div class="popup hidden" id="popup">
+    <p>Bạn có thật sự muốn mở cái hộp quà này không?</p>
+    <div class="buttons">
+      <button id="yesBtn">yessss</button>
+      <button id="noBtn">naur</button>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- ❓ Dấu hỏi nhỏ -->
+  <div class="question-mark hidden" id="questionMark">?</div>
+
+  <!-- 🎮 Minigame chọn số -->
+  <div class="minigame hidden" id="minigame">
+    <p>Chọn một số bất kỳ 👇</p>
+    <div class="number-grid" id="numberGrid"></div>
+    <p id="resultText"></p>
+  </div>
+
+  <!-- 🌸 Canvas hoa rơi -->
+  <canvas class="petalCanvas"></canvas>
+
+  <script src="js/petals.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
