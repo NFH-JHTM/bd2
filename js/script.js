@@ -67,9 +67,15 @@ function moveYesButton() {
   updateButtonText();
 
   if (attempts >= 6) {
-    yesBtn.textContent = "noooo";
-    noBtn.textContent = "noooo";
+    yesBtn.textContent = "noooo";  // Đổi nút yes thành "noooo"
     questionMark.classList.remove("hidden");
+  }
+}
+
+function updateButtonText() {
+  if (attempts < phrasesYes.length) {
+    yesBtn.textContent = phrasesYes[attempts % phrasesYes.length];
+    noBtn.textContent = phrasesNo[attempts % phrasesNo.length];
   }
 }
 
