@@ -134,7 +134,3 @@ body, button, p, h1, h2, h3 {
   font-size: 18px;
   cursor: pointer;
 }
-
-* {
-  user-select: none; 
-}
