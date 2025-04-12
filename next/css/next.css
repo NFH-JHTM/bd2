@@ -1,0 +1,135 @@
+/* next.css */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #212121;
+  font-family: 'Playfair Display', serif;
+}
+
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.gate {
+  position: absolute;
+  top: 50%;
+  width: 50vw;
+  height: 100%;
+  background-color: #555;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.gate.left {
+  left: 0;
+  transform-origin: left center;
+}
+
+.gate.right {
+  right: 0;
+  transform-origin: right center;
+}
+
+.gate.open {
+  animation: openGate 3s forwards;
+}
+
+@keyframes openGate {
+  0% { transform: translateY(-50%) scaleX(1); }
+  100% { transform: translateY(-50%) scaleX(0); }
+}
+
+.flash-transition {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  z-index: 2;
+}
+
+.flash-transition.flash-out {
+  opacity: 1;
+}
+
+.robot {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 300px;
+  background: #ddd;
+  border-radius: 20px;
+  display: none;
+  z-index: 3;
+  animation: robotAppearance 3s forwards;
+}
+
+@keyframes robotAppearance {
+  0% { transform: translateX(-50%) translateY(100px); opacity: 0; }
+  100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.robot .face {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.robot .eyes {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.robot .eye {
+  width: 10px;
+  height: 10px;
+  background: #000;
+  border-radius: 50%;
+}
+
+.robot .mouth {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 10px;
+  background: #f00;
+  border-radius: 10px;
+}
+
+.chat-bubble {
+  position: absolute;
+  top: -50px;
+  left: 100%;
+  transform: translateX(20px);
+  background: #eee;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  max-width: 200px;
+  z-index: 4;
+  animation: chatBubbleIn 2s forwards;
+}
+
+@keyframes chatBubbleIn {
+  0% { opacity: 0; transform: translateX(20px) translateY(10px); }
+  100% { opacity: 1; transform: translateX(20px) translateY(0); }
+}
