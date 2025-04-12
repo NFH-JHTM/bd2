@@ -52,12 +52,18 @@ function moveYesButton() {
   attempts++;
 
   // Tính toán giới hạn an toàn cho nút
-  const safeX = Math.min(window.innerWidth - yesBtn.offsetWidth, Math.random() * (window.innerWidth - yesBtn.offsetWidth));
-  const safeY = Math.min(window.innerHeight - yesBtn.offsetHeight, Math.random() * (window.innerHeight - yesBtn.offsetHeight));
+  const safeX = Math.min(
+    window.innerWidth - yesBtn.offsetWidth - 10, 
+    Math.max(0, Math.random() * (window.innerWidth - yesBtn.offsetWidth))
+  );
+  const safeY = Math.min(
+    window.innerHeight - yesBtn.offsetHeight - 10, 
+    Math.max(0, Math.random() * (window.innerHeight - yesBtn.offsetHeight))
+  );
 
   yesBtn.style.position = "absolute";
-  yesBtn.style.left = safeX + "px";
-  yesBtn.style.top = safeY + "px";
+  yesBtn.style.left = `${safeX}px`;
+  yesBtn.style.top = `${safeY}px`;
 
   updateButtonText();
 
