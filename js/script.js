@@ -10,30 +10,46 @@ const resultText = document.getElementById("resultText");
 let attempts = 0;
 let phrasesYes = ["yessss", "deal", "say less", "bet", "chắc lun"];
 let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo"];
-let currentYesIndex = 0;
 let targetNumber = 143;
+let flashClickable = false;
 
-// 🎁 Click vào hộp
+// 🎁 Khi nhấn hộp quà
 giftBox.addEventListener("click", () => {
   popup.classList.remove("hidden");
+  popup.classList.add("popup"); // re-trigger animation
+
+  // ✅ Reset nội dung popup thôi
+  if (attempts < 6) {
+    yesBtn.textContent = "yessss";
+    noBtn.textContent = "naur";
+    yesBtn.style.position = "static";
+    yesBtn.style.left = "";
+    yesBtn.style.top = "";
+  }
+
+  resultText.textContent = "";
+  resultText.style.fontSize = "16px";
 });
 
-// ❌ Nút no sẽ đóng popup
+// ❌ Nhấn nút no chỉ đóng popup (không reset)
 noBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
 });
 
-// Troll nút yesBtn
+// 🎯 Nút yessss né chuột/tay
 yesBtn.addEventListener("mouseenter", moveYesButton);
 yesBtn.addEventListener("touchstart", moveYesButton);
 
-function moveYesButton(e) {
+function moveYesButton() {
   attempts++;
-  const x = Math.random() * (window.innerWidth - 100);
-  const y = Math.random() * (window.innerHeight - 100);
+
+  const safeX = Math.min(window.innerWidth - 120, Math.random() * (window.innerWidth - 100));
+  const safeY = Math.min(window.innerHeight - 80, Math.random() * (window.innerHeight - 100));
+
   yesBtn.style.position = "absolute";
-  yesBtn.style.left = x + "px";
-  yesBtn.style.top = y + "px";
+  yesBtn.style.left = safeX + "px";
+  yesBtn.style.top = safeY + "px";
+
   updateButtonText();
 
   if (attempts >= 6) {
@@ -55,7 +71,7 @@ questionMark.addEventListener("click", () => {
   minigame.classList.remove("hidden");
   questionMark.classList.add("hidden");
 
-  // Gen số random
+  // Tạo 30 số ngẫu nhiên
   const numbers = new Set();
   numbers.add(targetNumber);
   while (numbers.size < 30) {
@@ -83,7 +99,7 @@ questionMark.addEventListener("click", () => {
   });
 });
 
-// ✅ Khi đúng
+// ✅ Nếu chọn đúng
 function showResult() {
   yesBtn.textContent = "yessss";
   yesBtn.style.position = "static";
@@ -94,7 +110,7 @@ function showResult() {
   };
 }
 
-// 🎉 Lời chúc + hoa rơi
+// 🎉 Hiện lời chúc + hoa rơi
 function showBirthdayMessage() {
   const msg = document.createElement("div");
   msg.textContent = "Chúc mừng sinh nhật! Mong bạn luôn hạnh phúc 🎂🎈";
