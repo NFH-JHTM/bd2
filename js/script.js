@@ -6,6 +6,8 @@ const questionMark = document.getElementById("questionMark");
 const minigame = document.getElementById("minigame");
 const numberGrid = document.getElementById("numberGrid");
 const resultText = document.getElementById("resultText");
+const closeMinigame = document.getElementById("closeMinigame");
+const minigameHeader = document.getElementById("minigameHeader");
 
 let attempts = 0;
 let phrasesYes = ["yessss", "deal", "say less", "bet", "chắc lun"];
@@ -16,9 +18,9 @@ let flashClickable = false;
 // 🎁 Khi nhấn hộp quà
 giftBox.addEventListener("click", () => {
   popup.classList.remove("hidden");
-  popup.classList.add("popup"); // re-trigger animation
+  popup.classList.add("popup");
 
-  // ✅ Reset nội dung popup thôi
+  // ✅ Reset nội dung popup nếu chưa troll đủ
   if (attempts < 6) {
     yesBtn.textContent = "yessss";
     noBtn.textContent = "naur";
@@ -31,7 +33,7 @@ giftBox.addEventListener("click", () => {
   resultText.style.fontSize = "16px";
 });
 
-// ❌ Nhấn nút no chỉ đóng popup (không reset)
+// ❌ Nhấn nút no chỉ đóng popup (không reset troll state)
 noBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
 });
@@ -43,12 +45,14 @@ yesBtn.addEventListener("touchstart", moveYesButton);
 function moveYesButton() {
   attempts++;
 
-  const safeX = Math.min(window.innerWidth - 120, Math.random() * (window.innerWidth - 100));
-  const safeY = Math.min(window.innerHeight - 80, Math.random() * (window.innerHeight - 100));
+  const maxX = window.innerWidth - 150;
+  const maxY = window.innerHeight - 100;
+  const x = Math.floor(Math.random() * maxX);
+  const y = Math.floor(Math.random() * maxY);
 
   yesBtn.style.position = "absolute";
-  yesBtn.style.left = safeX + "px";
-  yesBtn.style.top = safeY + "px";
+  yesBtn.style.left = x + "px";
+  yesBtn.style.top = y + "px";
 
   updateButtonText();
 
@@ -71,7 +75,6 @@ questionMark.addEventListener("click", () => {
   minigame.classList.remove("hidden");
   questionMark.classList.add("hidden");
 
-  // Tạo 30 số ngẫu nhiên
   const numbers = new Set();
   numbers.add(targetNumber);
   while (numbers.size < 30) {
@@ -103,6 +106,8 @@ questionMark.addEventListener("click", () => {
 function showResult() {
   yesBtn.textContent = "yessss";
   yesBtn.style.position = "static";
+  closeMinigame.classList.remove("hidden");
+
   yesBtn.onclick = () => {
     popup.classList.add("hidden");
     minigame.classList.add("hidden");
@@ -128,3 +133,33 @@ function showBirthdayMessage() {
   msg.style.zIndex = 999;
   document.body.appendChild(msg);
 }
+
+// 🔽 Nút thu nhỏ minigame
+closeMinigame.addEventListener("click", () => {
+  minigame.classList.add("hidden");
+});
+
+
+// 🖱️ Drag minigame panel
+let isDragging = false;
+let offsetX = 0, offsetY = 0;
+
+minigameHeader.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  offsetX = e.clientX - minigame.offsetLeft;
+  offsetY = e.clientY - minigame.offsetTop;
+  minigame.style.transition = "none";
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+  minigame.style.transition = "transform 0.2s ease";
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    minigame.style.left = `${e.clientX - offsetX}px`;
+    minigame.style.top = `${e.clientY - offsetY}px`;
+    minigame.style.position = "absolute";
+  }
+});
