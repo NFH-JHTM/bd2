@@ -1,41 +1,66 @@
-const giftBox = document.querySelector(".gift-box");
-const popup = document.querySelector(".popup");
-const yesBtn = document.querySelector(".yes-btn");
-const noBtn = document.querySelector(".no-btn");
-const questionMark = document.querySelector(".secret-hint");
-const gamePanel = document.querySelector(".game-panel");
-const numberGrid = document.querySelector(".number-grid");
-const card = document.querySelector(".card");
+const giftBox = document.getElementById("giftBox");
+const popup = document.getElementById("popup");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const questionMark = document.getElementById("questionMark");
+const minigame = document.getElementById("minigame");
+const numberGrid = document.getElementById("numberGrid");
+const resultText = document.getElementById("resultText");
+const closeMinigame = document.getElementById("closeMinigame");
+const minigameHeader = document.getElementById("minigameHeader");
 
-const yesVariants = ["yuppp", "yas queen", "suree", "uh huh", "let's gooo", "do it", "okieee"];
-const noVariants = ["naurr", "uh oh", "maybe not", "nopeee", "cancel", "deny it", "nevaa"];
+let attempts = 0;
+let phrasesYes = ["yessss", "deal", "say less", "bet", "chắc lun", "smash that", "open up", "send it", "aye go!", "no cap", "do ittt"];
+let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo", "miss me", "hard pass", "not today", "keep dreamin", "in ur dreamz", "nahhh"];
+let targetNumber = 143;
+let wrongAttempts = 0;
+let gameSolved = false;
 
-let interactionCount = 0;
-let secretVisible = true;
-let attemptCount = 0;
-let foundCorrect = false;
-
+// 🎁 Click hộp quà
 giftBox.addEventListener("click", () => {
-  if (!giftBox.classList.contains("disabled")) {
-    popup.style.display = "block";
-    resetButtons();
+  popup.classList.remove("hidden");
+  popup.classList.add("popup");
+
+  if (!gameSolved && attempts < 10) {
+    yesBtn.textContent = "yessss";
+    noBtn.textContent = "naur";
+    yesBtn.style.position = "static";
+    yesBtn.style.left = "";
+    yesBtn.style.top = "";
   }
+
+  resultText.textContent = "";
+  resultText.style.fontSize = "16px";
 });
 
+// ❌ Nhấn nút No
 noBtn.addEventListener("click", () => {
-  popup.style.display = "none";
-  resetButtons();
+  popup.classList.add("hidden");
+  // Reset yes/no text & position mỗi lần mở lại hộp
+  attempts = 0;
+  yesBtn.textContent = getRandomPhrase(phrasesYes);
+  noBtn.textContent = getRandomPhrase(phrasesNo);
+  yesBtn.style.position = "static";
+  yesBtn.style.left = "";
+  yesBtn.style.top = "";
 });
 
-function resetButtons() {
-  yesBtn.textContent = "yessss";
-  noBtn.textContent = "naur";
-  positionYesRandomly();
-}
+yesBtn.addEventListener("mouseenter", () => {
+  if (gameSolved) return;
+  moveYesButton();
+});
+yesBtn.addEventListener("touchstart", () => {
+  if (gameSolved) return;
+  moveYesButton();
+});
 
-function positionYesRandomly() {
-  const maxX = 400;
+function moveYesButton() {
+  attempts++;
+
+  // Di chuyển nút yes trong toàn màn hình (trừ kích thước nút)
+  const maxX = 400; // 500 - 50
   const maxY = 400;
+
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
 
@@ -43,84 +68,144 @@ function positionYesRandomly() {
   yesBtn.style.left = `${safeX}px`;
   yesBtn.style.top = `${safeY}px`;
 
-  if (interactionCount >= 5) {
-    const randomYes = yesVariants[Math.floor(Math.random() * yesVariants.length)];
-    const randomNo = noVariants[Math.floor(Math.random() * noVariants.length)];
-    yesBtn.textContent = randomYes;
-    noBtn.textContent = randomNo;
-  }
+  updateButtonText();
 
-  interactionCount++;
-
-  // Check if need to reveal the secret mark again
-  if (!secretVisible && interactionCount % 10 === 0) {
-    questionMark.style.display = "block";
-    secretVisible = true;
+  // Hiện nút ? nếu đủ 10 lần di chuyển sau khi bị ẩn
+  if (attempts >= 10 && questionMark.classList.contains("hidden")) {
+    questionMark.classList.remove("hidden");
   }
 }
 
-// Make the yes button dodge clicks
-yesBtn.addEventListener("mouseenter", positionYesRandomly);
-yesBtn.addEventListener("touchstart", positionYesRandomly);
+function updateButtonText() {
+  yesBtn.textContent = getRandomPhrase(phrasesYes);
+  noBtn.textContent = getRandomPhrase(phrasesNo);
+}
 
-// Show minigame when clicking the question mark
+function getRandomPhrase(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// ❓ Mở minigame
 questionMark.addEventListener("click", () => {
-  questionMark.style.display = "none";
-  secretVisible = false;
-  generateNumberGrid();
-  gamePanel.style.display = "block";
+  minigame.classList.remove("hidden");
+  renderMinigameNumbers(); // random lại
 });
 
-function generateNumberGrid() {
-  numberGrid.innerHTML = "";
-  const numbers = [];
-  while (numbers.length < 30) {
-    const rand = Math.floor(Math.random() * 999) + 1;
-    if (!numbers.includes(rand)) {
-      numbers.push(rand);
-    }
+function renderMinigameNumbers() {
+  const numbers = new Set();
+  numbers.add(targetNumber);
+  while (numbers.size < 30) {
+    numbers.add(Math.floor(Math.random() * 999) + 1);
   }
 
-  numbers.forEach(num => {
+  const nums = Array.from(numbers).sort(() => Math.random() - 0.5);
+  numberGrid.innerHTML = "";
+  resultText.textContent = "";
+
+  nums.forEach(num => {
     const btn = document.createElement("button");
     btn.textContent = num;
-    btn.className = "number-btn";
-    btn.addEventListener("click", () => checkNumber(num, btn));
+    btn.onclick = () => {
+      if (num === targetNumber) {
+        handleCorrect();
+      } else {
+        handleWrong();
+      }
+    };
     numberGrid.appendChild(btn);
   });
 }
 
-function checkNumber(num, btn) {
-  attemptCount++;
-  if (num === 143) {
-    btn.classList.add("correct");
-    showSuccess();
-  } else {
-    btn.classList.add("wrong");
-    numberGrid.querySelectorAll("button").forEach(b => b.disabled = true);
-    setTimeout(() => {
-      gamePanel.style.display = "none";
-    }, 1000);
+function handleCorrect() {
+  resultText.textContent = "🎉 Bạn đã chọn đúng số 143!";
+  resultText.style.color = "green";
 
-    // Ẩn dấu ? và đợi 10 lần mới hiện lại
-    questionMark.style.display = "none";
-    secretVisible = false;
+  yesBtn.textContent = "yessss";
+  noBtn.textContent = "yessss";
+  yesBtn.style.position = "static";
+  noBtn.style.position = "static";
+  gameSolved = true;
+
+  [yesBtn, noBtn].forEach(btn => {
+    btn.onclick = () => {
+      popup.classList.add("hidden");
+      minigame.classList.add("hidden");
+      showBirthdayMessage();
+    };
+  });
+
+  closeMinigame.classList.remove("hidden");
+}
+
+function handleWrong() {
+  resultText.textContent = "Sai rùi 😢";
+  resultText.style.color = "red";
+  minigame.classList.add("hidden");
+
+  // Nếu đã hiện dấu ? thì ẩn và reset attempts
+  if (!questionMark.classList.contains("hidden")) {
+    questionMark.classList.add("hidden");
+    attempts = 0;
   }
+
+  setTimeout(() => {
+    popup.classList.add("hidden");
+    yesBtn.style.position = "static";
+    updateButtonText();
+  }, 1000);
 }
 
-function showSuccess() {
-  gamePanel.style.display = "none";
-  popup.style.display = "none";
-  giftBox.classList.add("disabled");
-  giftBox.style.opacity = "0.5";
-  giftBox.style.pointerEvents = "none";
+// 🔽 Thu nhỏ/hiện lại minigame
+closeMinigame.addEventListener("click", () => {
+  const isHidden = minigame.classList.contains("hidden");
 
-  // Chạy hiệu ứng hoa rơi 🎉
-  loadPetalScript();
+  if (isHidden) {
+    minigame.classList.remove("hidden");
+    renderMinigameNumbers(); // random lại số
+  } else {
+    minigame.classList.add("hidden");
+  }
+});
+
+// 🎉 Lời chúc
+function showBirthdayMessage() {
+  const msg = document.createElement("div");
+  msg.textContent = "Chúc mừng sinh nhật! Mong bạn luôn hạnh phúc 🎂🎈";
+  msg.style.position = "absolute";
+  msg.style.top = "55%";
+  msg.style.left = "50%";
+  msg.style.transform = "translate(-50%, -50%)";
+  msg.style.background = "#fff0f5";
+  msg.style.padding = "30px";
+  msg.style.borderRadius = "20px";
+  msg.style.fontSize = "1.4rem";
+  msg.style.maxWidth = "80vw";
+  msg.style.wordBreak = "break-word";
+  msg.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
+  msg.style.zIndex = 999;
+  document.body.appendChild(msg);
 }
 
-function loadPetalScript() {
-  const script = document.createElement("script");
-  script.src = "js/petals.js";
-  document.body.appendChild(script);
-}
+// 🖱️ Drag minigame (PC)
+let isDragging = false;
+let offsetX = 0, offsetY = 0;
+
+minigameHeader.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  offsetX = e.clientX - minigame.offsetLeft;
+  offsetY = e.clientY - minigame.offsetTop;
+  minigame.style.transition = "none";
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+  minigame.style.transition = "transform 0.2s ease";
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    minigame.style.left = `${e.clientX - offsetX}px`;
+    minigame.style.top = `${e.clientY - offsetY}px`;
+    minigame.style.position = "absolute";
+  }
+});
