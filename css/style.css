@@ -258,3 +258,98 @@ button, a, div, span {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* Responsive for Mobile Devices */
+@media (max-width: 768px) {
+  /* Hộp quà */
+  .gift {
+    font-size: 80px;
+  }
+
+  /* Popup */
+  .popup, .minigame {
+    padding: 20px;
+    width: 90%;
+  }
+
+  /* Chữ trong popup */
+  .popup .buttons button {
+    font-size: 0.9rem;
+  }
+
+  /* Gallery: Hiển thị ảnh lớn hơn trên desktop và nhỏ hơn trên mobile */
+  .gallery-thumb {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Gallery: Tăng kích thước hình ảnh khi hover */
+  .gallery-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  /* Birthday message: Rộng hơn thay vì dài ra */
+  .floating-msg {
+    font-size: 1.2rem;
+    max-width: 80vw;
+    word-wrap: break-word;
+    text-align: center;
+  }
+
+  /* Cải thiện kích thước số trong minigame */
+  .number-grid button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  /* Chỉnh sửa font-size cho phần title trong minigame */
+  .minigame-header {
+    font-size: 1rem;
+  }
+}
+
+/* Responsive for Extra Small Devices */
+@media (max-width: 480px) {
+  .gift {
+    font-size: 60px;
+  }
+
+  /* Popup nhỏ hơn nữa */
+  .popup, .minigame {
+    padding: 15px;
+    width: 90%;
+  }
+
+  /* Button nhỏ hơn trên màn hình di động */
+  .popup .buttons button {
+    font-size: 0.8rem;
+  }
+
+  /* Gallery cho màn hình cực nhỏ */
+  .gallery-thumb {
+    width: 80px;
+    height: 80px;
+  }
+
+  /* Tăng kích thước hình ảnh khi hover trên mobile */
+  .gallery-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  /* Giới hạn chiều rộng của lời chúc trên mobile */
+  .floating-msg {
+    font-size: 1rem;
+    max-width: 90vw;
+  }
+
+  /* Sửa lại font-size của số trong minigame */
+  .number-grid button {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+
+  /* Cải thiện tiêu đề của minigame */
+  .minigame-header {
+    font-size: 0.9rem;
+  }
+}
