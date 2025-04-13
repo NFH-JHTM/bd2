@@ -194,7 +194,7 @@ closeMinigame.addEventListener("click", () => {
 // Lời chúc sinh nhật
 function showBirthdayMessage() {
   const msg = document.createElement("div");
-  msg.textContent = "Chúc mừng sinh nhật b nhaaaa, chúc bạn tuổi mới đạt được nhiều thành công trong cuộc sống này và năm nay là b đã 18 tuổi r đấy, có thể làm những điều mình thích mà ko phải lo gì ht nè. Năm nay phải cố gắng dậu nv1 nha b, rồi tìm dc eboy của mình nx =))) 🎂🎉";
+  msg.textContent = "Chúc mừng sinh nhật b nhaaaa, chúc bạn tuổi mới đạt được nhiều thành công trong cuộc sống này và năm nay là b đã 18 tuổi r đấy, có thể làm những điều mình thích mà không phải lo gì hết nè. Năm nay phải cố gắng đậu NV1 nha b, rồi tìm được eboy của mình nữa 🎂🎉";
 
   msg.style.position = "fixed";
   msg.style.top = "50%";
@@ -208,13 +208,12 @@ function showBirthdayMessage() {
   msg.style.wordBreak = "break-word";
   msg.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
   msg.style.zIndex = 999;
-
   msg.classList.add("floating-msg");
-  document.body.appendChild(msg);
 
+  document.body.appendChild(msg);
   giftBox.classList.add("hidden");
 
-  // Gallery bên dưới
+  // Gallery
   const gallery = document.createElement("div");
   gallery.className = "gallery";
 
@@ -222,7 +221,6 @@ function showBirthdayMessage() {
     "images/photo1.webp",
     "images/photo2.webp",
     "images/photo3.webp"
-    "images/photo4.webp"
   ];
 
   images.forEach(src => {
@@ -236,20 +234,21 @@ function showBirthdayMessage() {
   document.body.appendChild(gallery);
 }
 
+// Viewer mở ảnh
 function openImageViewer(src) {
   const viewer = document.getElementById("imageViewer");
   const viewerImg = document.getElementById("viewerImg");
   const downloadBtn = document.getElementById("downloadBtn");
 
+  viewer.classList.add("active");
   viewerImg.src = src;
   downloadBtn.href = src;
-
-  viewer.style.display = "flex";
 }
 
 document.getElementById("closeViewer").onclick = () => {
-  document.getElementById("imageViewer").style.display = "none";
+  document.getElementById("imageViewer").classList.remove("active");
 };
+
 
 
 
