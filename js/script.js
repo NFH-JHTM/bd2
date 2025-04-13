@@ -20,7 +20,7 @@ let maxY = 400;
 let yesBtnMoves = 0;
 let showQuestionMark = false;
 let isQuestionMarkVisible = false;
-let isYesBtnMoved10Times = false; // Thêm flag để theo dõi số lần di chuyển nút yes
+let isYesBtnMoved10Times = false; // Flag để theo dõi số lần di chuyển của nút Yes
 
 // Click hộp quà
 giftBox.addEventListener("click", () => {
@@ -76,12 +76,12 @@ noBtn.addEventListener("click", () => {
 
 // Né chuột
 yesBtn.addEventListener("mouseenter", () => {
-  if (gameSolved || isQuestionMarkVisible) return; // Chỉ tính sau khi dấu ? ẩn đi
+  if (gameSolved || isQuestionMarkVisible) return; // Không tính sau khi dấu ? đã xuất hiện
   moveYesButton();
 });
 
 yesBtn.addEventListener("touchstart", () => {
-  if (gameSolved || isQuestionMarkVisible) return; // Chỉ tính sau khi dấu ? ẩn đi
+  if (gameSolved || isQuestionMarkVisible) return; // Không tính sau khi dấu ? đã xuất hiện
   moveYesButton();
 });
 
@@ -89,7 +89,7 @@ function moveYesButton() {
   attempts++;
   yesBtnMoves++;
 
-  // Nếu đã di chuyển đủ 10 lần và dấu ? chưa xuất hiện thì bắt đầu tính và hiển thị dấu ?
+  // Kiểm tra khi nút Yes di chuyển đủ 10 lần và dấu ? chưa xuất hiện
   if (yesBtnMoves >= 10 && !isYesBtnMoved10Times) {
     isYesBtnMoved10Times = true;
     questionMark.classList.remove("hidden");
@@ -290,18 +290,15 @@ minigameHeader.addEventListener("mousedown", (e) => {
   isDragging = true;
   offsetX = e.clientX - minigame.offsetLeft;
   offsetY = e.clientY - minigame.offsetTop;
-  minigame.style.transition = "none";
-});
-
-document.addEventListener("mouseup", () => {
-  isDragging = false;
-  minigame.style.transition = "transform 0.2s ease";
 });
 
 document.addEventListener("mousemove", (e) => {
   if (isDragging) {
     minigame.style.left = `${e.clientX - offsetX}px`;
     minigame.style.top = `${e.clientY - offsetY}px`;
-    minigame.style.position = "absolute";
   }
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
 });
