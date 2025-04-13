@@ -194,7 +194,7 @@ closeMinigame.addEventListener("click", () => {
 // Lời chúc sinh nhật
 function showBirthdayMessage() {
   const msg = document.createElement("div");
-  msg.textContent = "Chúc mừng sinh nhật! Mong bạn luôn hạnh phúc 🎂🎈";
+  msg.textContent = "Chúc mừng sinh nhật b nhaaaa, chúc bạn tuổi mới đạt được nhiều thành công trong cuộc sống này và năm nay là b đã 18 tuổi r đấy, có thể làm những điều mình thích mà ko phải lo gì ht nè. Năm nay phải cố gắng dậu nv1 nha b, rồi tìm dc eboy của mình nx =))) 🎂🎉";
   msg.style.position = "absolute";
   msg.style.top = "55%";
   msg.style.left = "50%";
@@ -207,10 +207,15 @@ function showBirthdayMessage() {
   msg.style.wordBreak = "break-word";
   msg.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
   msg.style.zIndex = 999;
+
+  // Thêm animation
+  msg.classList.add("floating-msg");
+
   document.body.appendChild(msg);
 
   giftBox.classList.add("hidden");
 }
+
 
 // Drag minigame (PC)
 let isDragging = false;
