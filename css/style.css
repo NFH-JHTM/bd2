@@ -228,6 +228,11 @@ body, button, p, h1, h2, h3 {
   cursor: pointer;
 }
 
+#popup {
+  position: relative;
+}
+
+
 * {
   user-select: none; 
 }
