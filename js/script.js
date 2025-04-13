@@ -164,6 +164,7 @@ function handleWrong() {
   if (questionMark.classList.contains("hidden") && wrongAttempts > 0) {
     questionMark.classList.add("hidden");
     attempts = 0;
+    showQuestionMark = false; 
   }
 
   setTimeout(() => {
@@ -172,6 +173,7 @@ function handleWrong() {
     updateButtonText();
   }, 1000);
 }
+
 
 // Đóng/mở minigame
 closeMinigame.addEventListener("click", () => {
