@@ -68,8 +68,20 @@ yesBtn.addEventListener("touchstart", () => {
 });
 
 function moveYesButton() {
-  yesBtnMoves++;
   attempts++;
+
+  const popupRect = popup.getBoundingClientRect();
+  const btnRect = yesBtn.getBoundingClientRect();
+
+  const popupWidth = popupRect.width;
+  const popupHeight = popupRect.height;
+
+  const btnWidth = btnRect.width;
+  const btnHeight = btnRect.height;
+
+  // Giới hạn tối đa để nút không ra ngoài popup
+  const maxX = popupWidth - btnWidth - 20; // chừa 1 chút padding
+  const maxY = popupHeight - btnHeight - 20;
 
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
@@ -80,12 +92,11 @@ function moveYesButton() {
 
   updateButtonText();
 
-  if (yesBtnMoves >= 10 && !showQuestionMark) {
+  if (attempts >= 6) {
     questionMark.classList.remove("hidden");
-    showQuestionMark = true;
   }
-
 }
+
 
 function updateButtonText() {
   yesBtn.textContent = getRandomPhrase(phrasesYes);
