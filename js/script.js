@@ -219,9 +219,10 @@ function showBirthdayMessage() {
   gallery.className = "gallery";
 
   const images = [
-    "images/pic1.jpg",
-    "images/pic2.jpg",
-    "images/pic3.jpg"
+    "images/photo1.webp",
+    "images/photo2.webp",
+    "images/photo3.webp"
+    "images/photo4.webp"
   ];
 
   images.forEach(src => {
