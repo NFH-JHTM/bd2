@@ -15,26 +15,19 @@ let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo", "miss me", "hard p
 let targetNumber = 143;
 let wrongAttempts = 0;
 let gameSolved = false;
-let maxX = 400;
-let maxY = 400;
 let yesBtnMoves = 0;
 let showQuestionMark = false;
-let isQuestionMarkVisible = false;
-let isYesBtnMoved10Times = false; // Flag để theo dõi số lần di chuyển của nút Yes
 
 // Click hộp quà
 giftBox.addEventListener("click", () => {
   if (!gameSolved) {
     popup.classList.remove("hidden");
     popup.classList.add("popup");
-
-    // Đặt popup vào giữa màn hình
     popup.style.position = "fixed";
     popup.style.top = "50%";
     popup.style.left = "50%";
     popup.style.transform = "translate(-50%, -50%)";
 
-    // Reset lại vị trí và text
     if (attempts < 10) {
       yesBtn.textContent = "yessss";
       noBtn.textContent = "naur";
@@ -51,24 +44,19 @@ giftBox.addEventListener("click", () => {
 // Nhấn nút No
 noBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
-
-  // Reset lại mọi thứ khi click No
   attempts = 0;
   yesBtn.textContent = getRandomPhrase(phrasesYes);
   noBtn.textContent = getRandomPhrase(phrasesNo);
   yesBtn.style.position = "static";
   yesBtn.style.left = "";
   yesBtn.style.top = "";
-
   questionMark.classList.add("hidden");
   yesBtnMoves = 0;
-  isYesBtnMoved10Times = false; // Reset số lần di chuyển
+  showQuestionMark = false;
 
-  // Hiện lại yesBtn sau 10 lần move
   let retryChecker = setInterval(() => {
-    if (yesBtnMoves >= 10 && !isQuestionMarkVisible) {
-      questionMark.classList.remove("hidden");
-      isQuestionMarkVisible = true; // Đánh dấu đã hiện dấu ?
+    if (yesBtnMoves >= 10) {
+      popup.classList.remove("hidden");
       clearInterval(retryChecker);
     }
   }, 500);
@@ -76,38 +64,34 @@ noBtn.addEventListener("click", () => {
 
 // Né chuột
 yesBtn.addEventListener("mouseenter", () => {
-  if (gameSolved || isQuestionMarkVisible) return; // Không tính sau khi dấu ? đã xuất hiện
+  if (gameSolved) return;
   moveYesButton();
 });
 
 yesBtn.addEventListener("touchstart", () => {
-  if (gameSolved || isQuestionMarkVisible) return; // Không tính sau khi dấu ? đã xuất hiện
+  if (gameSolved) return;
   moveYesButton();
 });
 
 function moveYesButton() {
   attempts++;
-  yesBtnMoves++;
 
-  // Kiểm tra khi nút Yes di chuyển đủ 10 lần và dấu ? chưa xuất hiện
-  if (yesBtnMoves >= 10 && !isYesBtnMoved10Times) {
-    isYesBtnMoved10Times = true;
-    questionMark.classList.remove("hidden");
-    isQuestionMarkVisible = true; // Đánh dấu đã hiện dấu ?
+  if (!showQuestionMark) {
+    yesBtnMoves++;
+    if (yesBtnMoves >= 10) {
+      questionMark.classList.remove("hidden");
+      showQuestionMark = true;
+    }
   }
-
-  if (isQuestionMarkVisible) return; // Không tính sau khi dấu ? đã xuất hiện
 
   const popupRect = popup.getBoundingClientRect();
   const btnRect = yesBtn.getBoundingClientRect();
 
   const popupWidth = popupRect.width;
   const popupHeight = popupRect.height;
-
   const btnWidth = btnRect.width;
   const btnHeight = btnRect.height;
 
-  // Giới hạn theo thiết bị
   const isMobile = window.innerWidth < 768;
   const maxMoveX = isMobile ? 100 : 400;
   const maxMoveY = isMobile ? 100 : 400;
@@ -172,7 +156,6 @@ function handleCorrect() {
   noBtn.style.position = "static";
   gameSolved = true;
 
-  // Ẩn dấu ? sau khi win
   questionMark.classList.add("hidden");
   showQuestionMark = false;
 
@@ -181,13 +164,12 @@ function handleCorrect() {
       popup.classList.add("hidden");
       minigame.classList.add("hidden");
       showBirthdayMessage();
-      showFlowerEffect(); // Thêm hoa rơi
+      showFlowerEffect();
     };
   });
 
   closeMinigame.classList.remove("hidden");
 
-  // Tắt minigame sau 5 giây
   setTimeout(() => {
     minigame.classList.add("hidden");
   }, 5000);
@@ -197,13 +179,11 @@ function handleWrong() {
   resultText.textContent = "Sai rùi 😢";
   resultText.style.color = "red";
   minigame.classList.add("hidden");
-
   wrongAttempts++;
 
-  // Luôn ẩn dấu ? nếu chọn sai
   questionMark.classList.add("hidden");
-  showQuestionMark = false;       // ✅ Reset flag
-  yesBtnMoves = 0;                // ✅ Reset đếm di chuyển
+  showQuestionMark = false;
+  yesBtnMoves = 0;
 
   setTimeout(() => {
     popup.classList.add("hidden");
@@ -215,7 +195,6 @@ function handleWrong() {
 // Đóng/mở minigame
 closeMinigame.addEventListener("click", () => {
   const isHidden = minigame.classList.contains("hidden");
-
   if (isHidden) {
     minigame.classList.remove("hidden");
     renderMinigameNumbers();
@@ -246,7 +225,6 @@ function showBirthdayMessage() {
   document.body.appendChild(msg);
   giftBox.classList.add("hidden");
 
-  // Gallery
   const gallery = document.createElement("div");
   gallery.className = "gallery";
 
@@ -282,7 +260,7 @@ document.getElementById("closeViewer").onclick = () => {
   document.getElementById("imageViewer").classList.remove("active");
 };
 
-// Drag minigame (PC)
+// Drag minigame
 let isDragging = false;
 let offsetX = 0, offsetY = 0;
 
@@ -290,15 +268,18 @@ minigameHeader.addEventListener("mousedown", (e) => {
   isDragging = true;
   offsetX = e.clientX - minigame.offsetLeft;
   offsetY = e.clientY - minigame.offsetTop;
+  minigame.style.transition = "none";
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+  minigame.style.transition = "transform 0.2s ease";
 });
 
 document.addEventListener("mousemove", (e) => {
   if (isDragging) {
     minigame.style.left = `${e.clientX - offsetX}px`;
     minigame.style.top = `${e.clientY - offsetY}px`;
+    minigame.style.position = "absolute";
   }
-});
-
-document.addEventListener("mouseup", () => {
-  isDragging = false;
 });
