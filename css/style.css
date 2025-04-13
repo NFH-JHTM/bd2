@@ -143,6 +143,22 @@ body, button, p, h1, h2, h3 {
     z-index: 9999;
 }
 
+@keyframes floating {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.floating-msg {
+  animation: floating 3s ease-in-out infinite;
+}
+
 
 * {
   user-select: none; 
