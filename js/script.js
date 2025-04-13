@@ -65,7 +65,6 @@ function moveYesButton() {
   updateButtonText();
 
   if (attempts >= 6) {
-    yesBtn.textContent = "noooo";  // Đổi nút yes thành "noooo"
     questionMark.classList.remove("hidden");
   }
 }
