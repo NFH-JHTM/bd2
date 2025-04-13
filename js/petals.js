@@ -1,4 +1,5 @@
-document.querySelectorAll(".card").forEach(card => {
+function startPetalEffect() {
+  document.querySelectorAll(".card").forEach(card => {
     const canvas = card.querySelector(".petalCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -6,7 +7,7 @@ document.querySelectorAll(".card").forEach(card => {
     canvas.height = card.clientHeight;
 
     let petals = [];
-    const maxPetals = 10; // 🔥 Giới hạn số lượng hoa để tránh lag
+    const maxPetals = 10; // Giới hạn số lượng hoa để tránh lag
     let animationFrame;
 
     class Petal {
@@ -14,7 +15,7 @@ document.querySelectorAll(".card").forEach(card => {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
             this.size = Math.random() * 4 + 2;
-            this.speedY = Math.random() * 0.8 + 0.2; // 🔥 Bay chậm hơn
+            this.speedY = Math.random() * 0.8 + 0.2; // Bay chậm hơn
             this.opacity = Math.random() * 0.5 + 0.5;
         }
 
@@ -62,7 +63,7 @@ document.querySelectorAll(".card").forEach(card => {
         animationFrame = null;
     }
 
-    // 🎀 Khi chuyển tab, dừng animation
+    // Khi chuyển tab, dừng animation
     document.addEventListener("visibilitychange", function () {
         if (document.hidden) {
             stopAnimation();
@@ -73,4 +74,4 @@ document.querySelectorAll(".card").forEach(card => {
 
     createPetals();
     startAnimation();
-});
+}
