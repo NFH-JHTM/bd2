@@ -15,27 +15,34 @@ let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo", "miss me", "hard p
 let targetNumber = 143;
 let wrongAttempts = 0;
 let gameSolved = false;
+let maxX = 400; // Giới hạn vị trí của nút Yes trên trục X
+let maxY = 400; // Giới hạn vị trí của nút Yes trên trục Y
+let yesBtnMoves = 0;
+let showQuestionMark = false;
 
 // 🎁 Click hộp quà
 giftBox.addEventListener("click", () => {
-  popup.classList.remove("hidden");
-  popup.classList.add("popup");
+  if (!gameSolved) {
+    popup.classList.remove("hidden");
+    popup.classList.add("popup");
 
-  if (!gameSolved && attempts < 10) {
-    yesBtn.textContent = "yessss";
-    noBtn.textContent = "naur";
-    yesBtn.style.position = "static";
-    yesBtn.style.left = "";
-    yesBtn.style.top = "";
+    if (attempts < 10) {
+      yesBtn.textContent = "yessss";
+      noBtn.textContent = "naur";
+      yesBtn.style.position = "static";
+      yesBtn.style.left = "";
+      yesBtn.style.top = "";
+    }
+
+    resultText.textContent = "";
+    resultText.style.fontSize = "16px";
   }
-
-  resultText.textContent = "";
-  resultText.style.fontSize = "16px";
 });
 
 // ❌ Nhấn nút No
 noBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
+
   // Reset yes/no text & position mỗi lần mở lại hộp
   attempts = 0;
   yesBtn.textContent = getRandomPhrase(phrasesYes);
@@ -43,24 +50,28 @@ noBtn.addEventListener("click", () => {
   yesBtn.style.position = "static";
   yesBtn.style.left = "";
   yesBtn.style.top = "";
+
+  // Tắt nút ẩn khi chọn sai số
+  questionMark.classList.add("hidden");
+  yesBtnMoves = 0;
 });
 
+// Di chuyển nút Yes
 yesBtn.addEventListener("mouseenter", () => {
   if (gameSolved) return;
   moveYesButton();
 });
+
 yesBtn.addEventListener("touchstart", () => {
   if (gameSolved) return;
   moveYesButton();
 });
 
 function moveYesButton() {
+  yesBtnMoves++;
   attempts++;
 
-  // Di chuyển nút yes trong toàn màn hình (trừ kích thước nút)
-  const maxX = 400; // 500 - 50
-  const maxY = 400;
-
+  // Di chuyển nút yes trong phạm vi màn hình
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
 
@@ -68,11 +79,20 @@ function moveYesButton() {
   yesBtn.style.left = `${safeX}px`;
   yesBtn.style.top = `${safeY}px`;
 
+  // Thay đổi text mỗi lần di chuyển
   updateButtonText();
 
-  // Hiện nút ? nếu đủ 10 lần di chuyển sau khi bị ẩn
-  if (attempts >= 10 && questionMark.classList.contains("hidden")) {
+  // Hiện nút ẩn sau 10 lần di chuyển
+  if (yesBtnMoves >= 10 && !showQuestionMark) {
     questionMark.classList.remove("hidden");
+    showQuestionMark = true;
+  }
+
+  // Nếu đã có dấu hỏi, kiểm tra nếu đã chọn sai số
+  if (showQuestionMark && wrongAttempts > 0) {
+    questionMark.classList.add("hidden");
+    yesBtnMoves = 0; // Reset lại đếm
+    showQuestionMark = false;
   }
 }
 
@@ -142,8 +162,10 @@ function handleWrong() {
   resultText.style.color = "red";
   minigame.classList.add("hidden");
 
+  wrongAttempts++;
+
   // Nếu đã hiện dấu ? thì ẩn và reset attempts
-  if (!questionMark.classList.contains("hidden")) {
+  if (questionMark.classList.contains("hidden") && wrongAttempts > 0) {
     questionMark.classList.add("hidden");
     attempts = 0;
   }
@@ -184,6 +206,9 @@ function showBirthdayMessage() {
   msg.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
   msg.style.zIndex = 999;
   document.body.appendChild(msg);
+
+  // Vô hiệu hóa hộp quà sau khi hiện lời chúc
+  giftBox.classList.add("hidden");
 }
 
 // 🖱️ Drag minigame (PC)
