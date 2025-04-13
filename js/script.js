@@ -85,22 +85,19 @@ function moveYesButton() {
   }
 
   const popupRect = popup.getBoundingClientRect();
-  const btnRect = yesBtn.getBoundingClientRect();
+  const btnWidth = yesBtn.offsetWidth;
+  const btnHeight = yesBtn.offsetHeight;
 
-  const popupWidth = popupRect.width;
-  const popupHeight = popupRect.height;
-  const btnWidth = btnRect.width;
-  const btnHeight = btnRect.height;
+  
+  const maxX = Math.min(200, popupRect.width - btnWidth);
+  const maxY = Math.min(200, popupRect.height - btnHeight);
 
-  const maxMoveX = 200;
-  const maxMoveY = 200;
-
-  const safeX = Math.random() * Math.min(popupWidth - btnWidth - 20, maxMoveX);
-  const safeY = Math.random() * Math.min(popupHeight - btnHeight - 20, maxMoveY);
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
 
   yesBtn.style.position = "absolute";
-  yesBtn.style.left = `${safeX}px`;
-  yesBtn.style.top = `${safeY}px`;
+  yesBtn.style.left = `${randomX}px`;
+  yesBtn.style.top = `${randomY}px`;
 
   updateButtonText();
 }
