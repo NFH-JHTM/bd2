@@ -85,11 +85,6 @@ function moveYesButton() {
     showQuestionMark = true;
   }
 
-  if (showQuestionMark && wrongAttempts > 0) {
-    questionMark.classList.add("hidden");
-    yesBtnMoves = 0;
-    showQuestionMark = false;
-  }
 }
 
 function updateButtonText() {
