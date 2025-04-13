@@ -58,8 +58,8 @@ function moveYesButton() {
   attempts++;
 
   // Di chuyển nút yes trong toàn màn hình (trừ kích thước nút)
-  const maxX = window.innerWidth - yesBtn.offsetWidth - 20;
-  const maxY = window.innerHeight - yesBtn.offsetHeight - 20;
+  const maxX = 400; // 500 - 50
+  const maxY = 400;
 
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
