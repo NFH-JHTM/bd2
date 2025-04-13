@@ -135,6 +135,15 @@ body, button, p, h1, h2, h3 {
   cursor: pointer;
 }
 
+.petalCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+
 * {
   user-select: none; 
 }
