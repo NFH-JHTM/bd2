@@ -90,7 +90,7 @@ function moveYesButton() {
   const btnWidth = yesBtn.offsetWidth;
   const btnHeight = yesBtn.offsetHeight;
 
-  const limit = 400;
+  const limit = 700;
   const maxX = Math.min(limit, popupRect.width - btnWidth);
   const maxY = Math.min(limit, popupRect.height - btnHeight);
 
