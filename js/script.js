@@ -52,11 +52,10 @@ function moveYesButton() {
   attempts++;
 
   // Giới hạn phạm vi di chuyển của nút `yes`
-  const margin = 50;  // Cách cạnh màn hình một khoảng nhỏ
+  const margin = 50;
   const maxX = window.innerWidth - yesBtn.offsetWidth - margin;
   const maxY = window.innerHeight - yesBtn.offsetHeight - margin;
 
-  // Tính toán vị trí ngẫu nhiên nhưng luôn nằm trong phạm vi
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
 
@@ -67,7 +66,7 @@ function moveYesButton() {
   updateButtonText();
 
   if (attempts >= 6) {
-    yesBtn.textContent = "noooo";  // Đổi nút yes thành "noooo"
+    yesBtn.textContent = "noooo";
     questionMark.classList.remove("hidden");
   }
 }
@@ -79,22 +78,10 @@ function updateButtonText() {
   }
 }
 
-
-
-
-function updateButtonText() {
-  if (attempts < phrasesYes.length) {
-    yesBtn.textContent = phrasesYes[attempts % phrasesYes.length];
-    noBtn.textContent = phrasesNo[attempts % phrasesNo.length];
-  }
-}
-
 // ❓ Mở minigame
 questionMark.addEventListener("click", () => {
   minigame.classList.remove("hidden");
-  questionMark.classList.add("hidden");
-
-  renderMinigameNumbers();
+  renderMinigameNumbers(); // luôn random lại
 });
 
 function renderMinigameNumbers() {
@@ -132,7 +119,6 @@ function handleCorrect() {
   noBtn.style.position = "static";
   gameSolved = true;
 
-  // Gắn click mở quà
   [yesBtn, noBtn].forEach(btn => {
     btn.onclick = () => {
       popup.classList.add("hidden");
@@ -147,35 +133,37 @@ function handleCorrect() {
 function handleWrong() {
   resultText.textContent = "Sai rùi 😢";
   resultText.style.color = "red";
+
   minigame.classList.add("hidden");
 
   wrongAttempts++;
   if (wrongAttempts >= 5) {
     questionMark.classList.remove("hidden");
     wrongAttempts = 0;
+  } else {
+    // Tạm thời ẩn dấu hỏi chấm cho đến lần sau
+    questionMark.classList.add("hidden");
   }
 
-  // Reset lại popup và trạng thái minigame
   setTimeout(() => {
     popup.classList.add("hidden");
-    minigame.classList.add("hidden");
-    yesBtn.style.position = "static"; // Đặt lại vị trí nút
-    yesBtn.textContent = "yessss"; // Đặt lại text nút
-    noBtn.textContent = "naur"; // Đặt lại text nút
-    attempts = 0; // Reset lại số lần thử
-    resultText.textContent = ""; // Xóa kết quả
-  }, 1000); // delay để người chơi nhìn kết quả sai trước khi popup ẩn đi
+    yesBtn.style.position = "static";
+    yesBtn.textContent = "yessss";
+    noBtn.textContent = "naur";
+    attempts = 0;
+    resultText.textContent = "";
+  }, 1000);
 }
 
-// 🔽 Thu nhỏ/hiện lại minigame + random lại số
+// 🔽 Thu nhỏ/hiện lại minigame
 closeMinigame.addEventListener("click", () => {
   const isHidden = minigame.classList.contains("hidden");
 
   if (isHidden) {
     minigame.classList.remove("hidden");
-    renderMinigameNumbers();
+    renderMinigameNumbers(); // random lại số
   } else {
-    minigame.classList.add("hidden");
+    minigame.classList.add("hidden"); // chỉ ẩn minigame, không ảnh hưởng nút ?
   }
 });
 
@@ -198,7 +186,7 @@ function showBirthdayMessage() {
   document.body.appendChild(msg);
 }
 
-// 🖱️ Drag panel minigame (PC)
+// 🖱️ Drag minigame (PC)
 let isDragging = false;
 let offsetX = 0, offsetY = 0;
 
