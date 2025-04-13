@@ -52,8 +52,8 @@ function moveYesButton() {
   attempts++;
 
   // Giới hạn phạm vi di chuyển của nút `yes`
-  const maxX = 450; // 500 - 50
-  const maxY = 450;
+  const maxX = 400; // 500 - 50
+  const maxY = 400;
 
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
