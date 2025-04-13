@@ -167,7 +167,7 @@ function renderMinigameNumbers() {
 }
 
 function handleCorrect() {
-  resultText.textContent = "🎉 Bạn đã chọn đúng số 143!";
+  resultText.textContent = "🎉 Bạn đã chọn đúng số!";
   resultText.style.color = "green";
 
   yesBtn.textContent = "yessss";
