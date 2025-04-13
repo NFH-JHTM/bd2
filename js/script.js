@@ -236,7 +236,7 @@ function showBirthdayMessage() {
   msg.style.padding = "30px";
   msg.style.borderRadius = "20px";
   msg.style.fontSize = "1.4rem";
-  msg.style.maxWidth = "80vw";
+  msg.style.maxWidth = "150vw";
   msg.style.wordBreak = "break-word";
   msg.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
   msg.style.zIndex = 999;
