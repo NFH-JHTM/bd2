@@ -161,11 +161,10 @@ function handleWrong() {
 
   wrongAttempts++;
 
-  if (questionMark.classList.contains("hidden") && wrongAttempts > 0) {
-    questionMark.classList.add("hidden");
-    attempts = 0;
-    showQuestionMark = false; 
-  }
+  // Luôn ẩn dấu ? nếu chọn sai
+  questionMark.classList.add("hidden");
+  showQuestionMark = false;       // ✅ Reset flag
+  yesBtnMoves = 0;                // ✅ Reset đếm di chuyển
 
   setTimeout(() => {
     popup.classList.add("hidden");
