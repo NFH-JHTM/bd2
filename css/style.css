@@ -305,9 +305,6 @@ button, a, div, span {
 
 /* Responsive for Extra Small Devices */
 @media (max-width: 480px) {
-  .gift {
-    font-size: 60px;
-  }
 
   /* Popup nhỏ hơn nữa */
   .popup, .minigame {
