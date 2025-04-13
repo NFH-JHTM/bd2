@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
 </head>
 
-</head>
 <body>
 
   <!-- 🎁 Hộp quà chính -->
@@ -28,18 +27,24 @@
 
   <!-- 🎮 Minigame chọn số -->
   <div class="minigame hidden" id="minigame">
-  <div class="minigame-header" id="minigameHeader">
-    🎮 Minigame
-    <button id="closeMinigame">✖️</button>
+    <div class="minigame-header" id="minigameHeader">
+      🎮 Minigame
+      <button id="closeMinigame">✖️</button>
+    </div>
+    <p>Chọn một số bất kỳ 👇</p>
+    <div class="number-grid" id="numberGrid"></div>
+    <p id="resultText"></p>
   </div>
-  <p>Chọn một số bất kỳ 👇</p>
-  <div class="number-grid" id="numberGrid"></div>
-  <p id="resultText"></p>
-</div>
-
 
   <!-- 🌸 Canvas hoa rơi -->
   <canvas class="petalCanvas"></canvas>
+
+  <!-- 🖼️ Viewer khi zoom ảnh -->
+  <div id="imageViewer">
+    <img id="viewerImg" />
+    <button id="closeViewer">↩</button>
+    <a id="downloadBtn" download>⬇</a>
+  </div>
 
   <script src="js/petals.js"></script>
   <script src="js/script.js"></script>
