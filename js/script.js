@@ -19,6 +19,8 @@ let maxX = 400;
 let maxY = 400;
 let yesBtnMoves = 0;
 let showQuestionMark = false;
+let isQuestionMarkVisible = false;
+let isYesBtnMoved10Times = false; // Thêm flag để theo dõi số lần di chuyển nút yes
 
 // Click hộp quà
 giftBox.addEventListener("click", () => {
@@ -60,11 +62,13 @@ noBtn.addEventListener("click", () => {
 
   questionMark.classList.add("hidden");
   yesBtnMoves = 0;
+  isYesBtnMoved10Times = false; // Reset số lần di chuyển
 
   // Hiện lại yesBtn sau 10 lần move
   let retryChecker = setInterval(() => {
-    if (yesBtnMoves >= 10) {
-      popup.classList.remove("hidden");
+    if (yesBtnMoves >= 10 && !isQuestionMarkVisible) {
+      questionMark.classList.remove("hidden");
+      isQuestionMarkVisible = true; // Đánh dấu đã hiện dấu ?
       clearInterval(retryChecker);
     }
   }, 500);
@@ -72,18 +76,27 @@ noBtn.addEventListener("click", () => {
 
 // Né chuột
 yesBtn.addEventListener("mouseenter", () => {
-  if (gameSolved) return;
+  if (gameSolved || isQuestionMarkVisible) return; // Chỉ tính sau khi dấu ? ẩn đi
   moveYesButton();
 });
 
 yesBtn.addEventListener("touchstart", () => {
-  if (gameSolved) return;
+  if (gameSolved || isQuestionMarkVisible) return; // Chỉ tính sau khi dấu ? ẩn đi
   moveYesButton();
 });
 
 function moveYesButton() {
   attempts++;
   yesBtnMoves++;
+
+  // Nếu đã di chuyển đủ 10 lần và dấu ? chưa xuất hiện thì bắt đầu tính và hiển thị dấu ?
+  if (yesBtnMoves >= 10 && !isYesBtnMoved10Times) {
+    isYesBtnMoved10Times = true;
+    questionMark.classList.remove("hidden");
+    isQuestionMarkVisible = true; // Đánh dấu đã hiện dấu ?
+  }
+
+  if (isQuestionMarkVisible) return; // Không tính sau khi dấu ? đã xuất hiện
 
   const popupRect = popup.getBoundingClientRect();
   const btnRect = yesBtn.getBoundingClientRect();
@@ -107,11 +120,6 @@ function moveYesButton() {
   yesBtn.style.top = `${safeY}px`;
 
   updateButtonText();
-
-  // Hiện dấu hỏi sau 6 lần
-  if (attempts >= 6) {
-    questionMark.classList.remove("hidden");
-  }
 }
 
 function updateButtonText() {
