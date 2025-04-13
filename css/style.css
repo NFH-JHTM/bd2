@@ -94,57 +94,6 @@ body {
   z-index: 0;
 }
 
-.popup {
-  animation: scaleIn 0.4s ease;
-}
-
-@keyframes scaleIn {
-  0% {
-    transform: scale(0.6) translate(-50%, -50%);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1) translate(-50%, -50%);
-    opacity: 1;
-  }
-}
-
-body, button, p, h1, h2, h3 {
-  font-family: 'Itim', cursive;
-}
-
-.minigame {
-  transition: transform 0.2s ease;
-  user-select: none;
-}
-
-.minigame-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
-  margin-bottom: 10px;
-  background: #ffc1e3;
-  padding: 5px 10px;
-  border-radius: 12px;
-  cursor: move;
-}
-
-#closeMinigame {
-  border: none;
-  background: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.petalCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 9999;
-}
-
 @keyframes floating {
   0% {
     transform: translate(-50%, -50%) translateY(0);
@@ -264,13 +213,18 @@ button, a, div, span {
 /* Responsive Styles */
 @media screen and (max-width: 768px) {
   .gift {
-    font-size: 100px;
-    width: 30vw; /* Hộp quà sẽ to hơn trên mobile */
+    font-size: 140px; /* Tăng kích thước hộp quà trên mobile */
+    width: 35vw; /* Hộp quà sẽ to hơn trên mobile */
+  }
+
+  .popup {
+    width: 80vw; /* Giãn rộng khung câu chúc */
+    padding: 25px;
   }
 
   .gallery-thumb {
-    width: 120px;  /* Giảm kích thước hình ảnh trên mobile */
-    height: 120px;
+    width: 170px;  /* Giảm kích thước hình ảnh trên mobile */
+    height: 170px;
   }
 
   .floating-msg {
@@ -288,17 +242,18 @@ button, a, div, span {
 
 @media screen and (max-width: 480px) {
   .gift {
-    font-size: 80px;
-    width: 40vw; /* Hộp quà sẽ to hơn nữa trên mobile nhỏ */
+    font-size: 180px; /* Tăng kích thước hộp quà trên mobile nhỏ */
+    width: 45vw; /* Hộp quà sẽ to hơn nữa trên mobile nhỏ */
   }
 
   .popup {
+    width: 90vw; /* Giãn rộng khung câu chúc hơn trên mobile nhỏ */
     padding: 20px;
   }
 
   .gallery-thumb {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
 
   .floating-msg {
