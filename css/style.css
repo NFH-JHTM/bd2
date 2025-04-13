@@ -232,7 +232,17 @@ body, button, p, h1, h2, h3 {
   position: relative;
 }
 
-
-* {
-  user-select: none; 
+#yesBtn {
+  z-index: 1000;
 }
+
+
+html, body {
+  -webkit-user-drag: none; /* Không cho kéo ảnh */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: manipulation; /* Giảm delay tương tác trên mobile */
+}
+
