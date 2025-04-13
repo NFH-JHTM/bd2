@@ -1,211 +1,175 @@
-const giftBox = document.getElementById("giftBox");
-const popup = document.getElementById("popup");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const questionMark = document.getElementById("questionMark");
-const minigame = document.getElementById("minigame");
-const numberGrid = document.getElementById("numberGrid");
-const resultText = document.getElementById("resultText");
-const closeMinigame = document.getElementById("closeMinigame");
-const minigameHeader = document.getElementById("minigameHeader");
+const popup = document.getElementById("popup");
+const openBoxBtn = document.getElementById("giftBox");
+const mysteryBtn = document.getElementById("mysteryBtn");
+const minigamePanel = document.getElementById("minigamePanel");
+const numberButtons = document.getElementById("numberButtons");
+const card = document.querySelector(".card");
+const petalCanvas = document.createElement("canvas");
+petalCanvas.classList.add("petalCanvas");
+card.appendChild(petalCanvas);
 
-let attempts = 0;
-let phrasesYes = ["yessss", "deal", "say less", "bet", "chắc lun", "smash that", "open up", "send it", "aye go!", "no cap", "do ittt"];
-let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo", "miss me", "hard pass", "not today", "keep dreamin", "in ur dreamz", "nahhh"];
-let targetNumber = 143;
-let wrongAttempts = 0;
-let gameSolved = false;
+const yesVariants = ["yessss", "yezzz", "yappp", "okieee", "gogogo", "sureeee"];
+const noVariants = ["naur", "nopeee", "nevaa", "uh-uh", "nuuuu", "nahhh"];
 
-// 🎁 Click hộp quà
-giftBox.addEventListener("click", () => {
-  popup.classList.remove("hidden");
-  popup.classList.add("popup");
-
-  if (!gameSolved && attempts < 10) {
-    yesBtn.textContent = "yessss";
-    noBtn.textContent = "naur";
-    yesBtn.style.position = "static";
-    yesBtn.style.left = "";
-    yesBtn.style.top = "";
-  }
-
-  resultText.textContent = "";
-  resultText.style.fontSize = "16px";
-});
-
-// ❌ Nhấn nút No
-noBtn.addEventListener("click", () => {
-  popup.classList.add("hidden");
-  // Reset yes/no text & position mỗi lần mở lại hộp
-  attempts = 0;
-  yesBtn.textContent = getRandomPhrase(phrasesYes);
-  noBtn.textContent = getRandomPhrase(phrasesNo);
-  yesBtn.style.position = "static";
-  yesBtn.style.left = "";
-  yesBtn.style.top = "";
-});
-
-yesBtn.addEventListener("mouseenter", () => {
-  if (gameSolved) return;
-  moveYesButton();
-});
-yesBtn.addEventListener("touchstart", () => {
-  if (gameSolved) return;
-  moveYesButton();
-});
+let attemptCount = 0;
+let wrongGuessCount = 0;
+let moveCountSinceLastReveal = 0;
+let currentYesIndex = 0;
+let currentNoIndex = 0;
 
 function moveYesButton() {
-  attempts++;
-
-  // Di chuyển nút yes trong toàn màn hình (trừ kích thước nút)
-  const maxX = 400; // 500 - 50
+  const maxX = 400;
   const maxY = 400;
-
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
 
   yesBtn.style.position = "absolute";
-  yesBtn.style.left = `${safeX}px`;
-  yesBtn.style.top = `${safeY}px`;
+  yesBtn.style.left = safeX + "px";
+  yesBtn.style.top = safeY + "px";
 
-  updateButtonText();
+  attemptCount++;
+  moveCountSinceLastReveal++;
 
-  // Hiện nút ? nếu đủ 10 lần di chuyển sau khi bị ẩn
-  if (attempts >= 10 && questionMark.classList.contains("hidden")) {
-    questionMark.classList.remove("hidden");
+  currentYesIndex = (currentYesIndex + 1) % yesVariants.length;
+  currentNoIndex = (currentNoIndex + 1) % noVariants.length;
+  yesBtn.textContent = yesVariants[currentYesIndex];
+  noBtn.textContent = noVariants[currentNoIndex];
+
+  if (moveCountSinceLastReveal >= 10) {
+    mysteryBtn.style.display = "block";
+    moveCountSinceLastReveal = 0;
   }
 }
 
-function updateButtonText() {
-  yesBtn.textContent = getRandomPhrase(phrasesYes);
-  noBtn.textContent = getRandomPhrase(phrasesNo);
-}
+yesBtn.addEventListener("mouseover", moveYesButton);
+yesBtn.addEventListener("touchstart", moveYesButton);
 
-function getRandomPhrase(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-// ❓ Mở minigame
-questionMark.addEventListener("click", () => {
-  minigame.classList.remove("hidden");
-  renderMinigameNumbers(); // random lại
+noBtn.addEventListener("click", () => {
+  popup.style.display = "none";
+  // Reset buttons
+  yesBtn.textContent = "yessss";
+  noBtn.textContent = "naur";
+  yesBtn.style.left = "";
+  yesBtn.style.top = "";
+  moveCountSinceLastReveal = 0;
+  mysteryBtn.style.display = "none";
 });
 
-function renderMinigameNumbers() {
-  const numbers = new Set();
-  numbers.add(targetNumber);
-  while (numbers.size < 30) {
-    numbers.add(Math.floor(Math.random() * 999) + 1);
+openBoxBtn.addEventListener("click", () => {
+  popup.style.display = "block";
+});
+
+mysteryBtn.addEventListener("click", () => {
+  minigamePanel.style.display = "block";
+  numberButtons.innerHTML = "";
+
+  const numbers = [];
+  while (numbers.length < 30) {
+    const rand = Math.floor(Math.random() * 999) + 1;
+    if (!numbers.includes(rand)) numbers.push(rand);
   }
 
-  const nums = Array.from(numbers).sort(() => Math.random() - 0.5);
-  numberGrid.innerHTML = "";
-  resultText.textContent = "";
-
-  nums.forEach(num => {
+  numbers.forEach(num => {
     const btn = document.createElement("button");
     btn.textContent = num;
-    btn.onclick = () => {
-      if (num === targetNumber) {
-        handleCorrect();
-      } else {
-        handleWrong();
-      }
-    };
-    numberGrid.appendChild(btn);
+    btn.classList.add("num-btn");
+    btn.addEventListener("click", () => handleGuess(num));
+    numberButtons.appendChild(btn);
   });
-}
+});
 
-function handleCorrect() {
-  resultText.textContent = "🎉 Bạn đã chọn đúng số 143!";
-  resultText.style.color = "green";
+function handleGuess(num) {
+  if (num === 143) {
+    minigamePanel.innerHTML = "<h2>Bạn đã mở được hộp quà thành công 🎉</h2>";
+    openBoxBtn.classList.add("disabled");
+    openBoxBtn.style.pointerEvents = "none";
 
-  yesBtn.textContent = "yessss";
-  noBtn.textContent = "yessss";
-  yesBtn.style.position = "static";
-  noBtn.style.position = "static";
-  gameSolved = true;
-
-  [yesBtn, noBtn].forEach(btn => {
-    btn.onclick = () => {
-      popup.classList.add("hidden");
-      minigame.classList.add("hidden");
-      showBirthdayMessage();
-    };
-  });
-
-  closeMinigame.classList.remove("hidden");
-}
-
-function handleWrong() {
-  resultText.textContent = "Sai rùi 😢";
-  resultText.style.color = "red";
-  minigame.classList.add("hidden");
-
-  // Nếu đã hiện dấu ? thì ẩn và reset attempts
-  if (!questionMark.classList.contains("hidden")) {
-    questionMark.classList.add("hidden");
-    attempts = 0;
-  }
-
-  setTimeout(() => {
-    popup.classList.add("hidden");
-    yesBtn.style.position = "static";
-    updateButtonText();
-  }, 1000);
-}
-
-// 🔽 Thu nhỏ/hiện lại minigame
-closeMinigame.addEventListener("click", () => {
-  const isHidden = minigame.classList.contains("hidden");
-
-  if (isHidden) {
-    minigame.classList.remove("hidden");
-    renderMinigameNumbers(); // random lại số
+    startPetalEffect();
   } else {
-    minigame.classList.add("hidden");
-  }
-});
+    wrongGuessCount++;
+    if (wrongGuessCount >= 1) {
+      mysteryBtn.style.display = "none";
+      moveCountSinceLastReveal = 0;
+    }
 
-// 🎉 Lời chúc
-function showBirthdayMessage() {
-  const msg = document.createElement("div");
-  msg.textContent = "Chúc mừng sinh nhật! Mong bạn luôn hạnh phúc 🎂🎈";
-  msg.style.position = "absolute";
-  msg.style.top = "55%";
-  msg.style.left = "50%";
-  msg.style.transform = "translate(-50%, -50%)";
-  msg.style.background = "#fff0f5";
-  msg.style.padding = "30px";
-  msg.style.borderRadius = "20px";
-  msg.style.fontSize = "1.4rem";
-  msg.style.maxWidth = "80vw";
-  msg.style.wordBreak = "break-word";
-  msg.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
-  msg.style.zIndex = 999;
-  document.body.appendChild(msg);
+    noBtn.style.fontSize = parseInt(window.getComputedStyle(noBtn).fontSize) + 4 + "px";
+  }
 }
 
-// 🖱️ Drag minigame (PC)
-let isDragging = false;
-let offsetX = 0, offsetY = 0;
+function startPetalEffect() {
+  const canvas = document.querySelector(".petalCanvas");
+  const ctx = canvas.getContext("2d");
 
-minigameHeader.addEventListener("mousedown", (e) => {
-  isDragging = true;
-  offsetX = e.clientX - minigame.offsetLeft;
-  offsetY = e.clientY - minigame.offsetTop;
-  minigame.style.transition = "none";
-});
+  canvas.width = card.clientWidth;
+  canvas.height = card.clientHeight;
 
-document.addEventListener("mouseup", () => {
-  isDragging = false;
-  minigame.style.transition = "transform 0.2s ease";
-});
+  let petals = [];
+  const maxPetals = 10;
+  let animationFrame;
 
-document.addEventListener("mousemove", (e) => {
-  if (isDragging) {
-    minigame.style.left = `${e.clientX - offsetX}px`;
-    minigame.style.top = `${e.clientY - offsetY}px`;
-    minigame.style.position = "absolute";
+  class Petal {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 4 + 2;
+      this.speedY = Math.random() * 0.8 + 0.2;
+      this.opacity = Math.random() * 0.5 + 0.5;
+    }
+
+    update() {
+      this.y += this.speedY;
+      if (this.y > canvas.height) {
+        this.y = -10;
+        this.x = Math.random() * canvas.width;
+      }
+    }
+
+    draw() {
+      ctx.globalAlpha = this.opacity;
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
-});
+
+  function createPetals() {
+    petals = [];
+    for (let i = 0; i < maxPetals; i++) {
+      petals.push(new Petal());
+    }
+  }
+
+  function animatePetals() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    petals.forEach(petal => {
+      petal.update();
+      petal.draw();
+    });
+    animationFrame = requestAnimationFrame(animatePetals);
+  }
+
+  function startAnimation() {
+    if (!animationFrame) {
+      animatePetals();
+    }
+  }
+
+  function stopAnimation() {
+    cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+      stopAnimation();
+    } else {
+      startAnimation();
+    }
+  });
+
+  createPetals();
+  startAnimation();
+}
