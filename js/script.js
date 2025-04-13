@@ -52,9 +52,8 @@ function moveYesButton() {
   attempts++;
 
   // Giới hạn phạm vi di chuyển của nút `yes`
-  const margin = 50;
-  const maxX = window.innerWidth - yesBtn.offsetWidth - margin;
-  const maxY = window.innerHeight - yesBtn.offsetHeight - margin;
+  const maxX = 450; // 500 - 50
+  const maxY = 450;
 
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
@@ -66,10 +65,11 @@ function moveYesButton() {
   updateButtonText();
 
   if (attempts >= 6) {
-    yesBtn.textContent = "noooo";
+    yesBtn.textContent = "noooo";  // Đổi nút yes thành "noooo"
     questionMark.classList.remove("hidden");
   }
 }
+
 
 function updateButtonText() {
   if (attempts < phrasesYes.length) {
