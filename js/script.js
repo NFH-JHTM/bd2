@@ -42,8 +42,6 @@ let gameSolved = false;
 
 // 🎁 Click hộp quà
 giftBox.addEventListener("click", () => {
-  if (gameSolved) return; // Không thể nhấn khi đã hoàn thành
-
   popup.classList.remove("hidden");
   popup.classList.add("popup");
 
@@ -142,9 +140,6 @@ function handleCorrect() {
   yesBtn.style.position = "static";
   noBtn.style.position = "static";
   gameSolved = true;
-
-  // Gọi hiệu ứng hoa rơi từ petals.js
-  startPetalEffect();
 
   [yesBtn, noBtn].forEach(btn => {
     btn.onclick = () => {
