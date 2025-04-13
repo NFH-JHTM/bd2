@@ -17,6 +17,8 @@ let wrongAttempts = 0;
 let gameSolved = false;
 let yesBtnMoves = 0;
 let showQuestionMark = false;
+let lastX = 0;
+let lastY = 0;
 
 // Click hộp quà
 giftBox.addEventListener("click", () => {
@@ -88,16 +90,28 @@ function moveYesButton() {
   const btnWidth = yesBtn.offsetWidth;
   const btnHeight = yesBtn.offsetHeight;
 
-  
-  const maxX = Math.min(200, popupRect.width - btnWidth);
-  const maxY = Math.min(200, popupRect.height - btnHeight);
+  const limit = 250;
 
-  const randomX = Math.random() * maxX;
-  const randomY = Math.random() * maxY;
+  const maxX = Math.min(limit, popupRect.width - btnWidth);
+  const maxY = Math.min(limit, popupRect.height - btnHeight);
+
+  let newX, newY;
+  const minDistance = 50; // khoảng cách tối thiểu giữa lần trước và lần mới
+
+  do {
+    newX = Math.random() * maxX;
+    newY = Math.random() * maxY;
+  } while (
+    Math.abs(newX - lastX) < minDistance &&
+    Math.abs(newY - lastY) < minDistance
+  );
+
+  lastX = newX;
+  lastY = newY;
 
   yesBtn.style.position = "absolute";
-  yesBtn.style.left = `${randomX}px`;
-  yesBtn.style.top = `${randomY}px`;
+  yesBtn.style.left = `${newX}px`;
+  yesBtn.style.top = `${newY}px`;
 
   updateButtonText();
 }
