@@ -10,30 +10,24 @@ const closeMinigame = document.getElementById("closeMinigame");
 const minigameHeader = document.getElementById("minigameHeader");
 
 let attempts = 0;
+let phrasesYes = ["yessss", "deal", "say less", "bet", "chắc lun", "smash that", "open up", "send it", "aye go!", "no cap", "do ittt"];
+let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo", "miss me", "hard pass", "not today", "keep dreamin", "in ur dreamz", "nahhh"];
+let targetNumber = 143;
 let wrongAttempts = 0;
 let gameSolved = false;
-
-const phrasesYes = [
-  "yessss", "deal", "say less", "bet", "chắc lun",
-  "smash that", "open up", "send it", "aye go!", "no cap", "do ittt"
-];
-const phrasesNo = [
-  "naur", "bruh", "nah fam", "outtt", "noooo",
-  "miss me", "hard pass", "not today", "keep dreamin", "in ur dreamz", "nahhh"
-];
-const targetNumber = 143;
 
 // 🎁 Click hộp quà
 giftBox.addEventListener("click", () => {
   popup.classList.remove("hidden");
   popup.classList.add("popup");
 
-  // Luôn reset text & vị trí mỗi lần mở
-  attempts = 0;
-  updateButtonText();
-  yesBtn.style.position = "static";
-  yesBtn.style.left = "";
-  yesBtn.style.top = "";
+  if (!gameSolved && attempts < 10) {
+    yesBtn.textContent = "yessss";
+    noBtn.textContent = "naur";
+    yesBtn.style.position = "static";
+    yesBtn.style.left = "";
+    yesBtn.style.top = "";
+  }
 
   resultText.textContent = "";
   resultText.style.fontSize = "16px";
@@ -42,14 +36,15 @@ giftBox.addEventListener("click", () => {
 // ❌ Nhấn nút No
 noBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
+  // Reset yes/no text & position mỗi lần mở lại hộp
   attempts = 0;
-  updateButtonText();
+  yesBtn.textContent = getRandomPhrase(phrasesYes);
+  noBtn.textContent = getRandomPhrase(phrasesNo);
   yesBtn.style.position = "static";
   yesBtn.style.left = "";
   yesBtn.style.top = "";
 });
 
-// ✅ Nút Yes né chuột
 yesBtn.addEventListener("mouseenter", () => {
   if (gameSolved) return;
   moveYesButton();
@@ -62,8 +57,10 @@ yesBtn.addEventListener("touchstart", () => {
 function moveYesButton() {
   attempts++;
 
-  const maxX = 400;
-  const maxY = 400;
+  // Di chuyển nút yes trong toàn màn hình (trừ kích thước nút)
+  const maxX = window.innerWidth - yesBtn.offsetWidth - 20;
+  const maxY = window.innerHeight - yesBtn.offsetHeight - 20;
+
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
 
@@ -73,22 +70,25 @@ function moveYesButton() {
 
   updateButtonText();
 
-  if (attempts >= 6) {
+  // Hiện nút ? nếu đủ 10 lần di chuyển sau khi bị ẩn
+  if (attempts >= 10 && questionMark.classList.contains("hidden")) {
     questionMark.classList.remove("hidden");
   }
 }
 
 function updateButtonText() {
-  const randYes = phrasesYes[Math.floor(Math.random() * phrasesYes.length)];
-  const randNo = phrasesNo[Math.floor(Math.random() * phrasesNo.length)];
-  yesBtn.textContent = randYes;
-  noBtn.textContent = randNo;
+  yesBtn.textContent = getRandomPhrase(phrasesYes);
+  noBtn.textContent = getRandomPhrase(phrasesNo);
+}
+
+function getRandomPhrase(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 // ❓ Mở minigame
 questionMark.addEventListener("click", () => {
   minigame.classList.remove("hidden");
-  renderMinigameNumbers();
+  renderMinigameNumbers(); // random lại
 });
 
 function renderMinigameNumbers() {
@@ -142,34 +142,26 @@ function handleWrong() {
   resultText.style.color = "red";
   minigame.classList.add("hidden");
 
-  // Nếu đã hiện dấu ? => ẩn lại + reset wrongAttempts
+  // Nếu đã hiện dấu ? thì ẩn và reset attempts
   if (!questionMark.classList.contains("hidden")) {
     questionMark.classList.add("hidden");
-    wrongAttempts = 0;
-  } else {
-    wrongAttempts++;
-    if (wrongAttempts >= 10) {
-      questionMark.classList.remove("hidden");
-      wrongAttempts = 0;
-    }
+    attempts = 0;
   }
 
   setTimeout(() => {
     popup.classList.add("hidden");
     yesBtn.style.position = "static";
-    yesBtn.textContent = "yessss";
-    noBtn.textContent = "naur";
-    attempts = 0;
     updateButtonText();
   }, 1000);
 }
+
 // 🔽 Thu nhỏ/hiện lại minigame
 closeMinigame.addEventListener("click", () => {
   const isHidden = minigame.classList.contains("hidden");
 
   if (isHidden) {
     minigame.classList.remove("hidden");
-    renderMinigameNumbers();
+    renderMinigameNumbers(); // random lại số
   } else {
     minigame.classList.add("hidden");
   }
