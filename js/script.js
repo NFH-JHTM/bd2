@@ -15,17 +15,18 @@ let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo", "miss me", "hard p
 let targetNumber = 143;
 let wrongAttempts = 0;
 let gameSolved = false;
-let maxX = 400; // Giới hạn vị trí của nút Yes trên trục X
-let maxY = 400; // Giới hạn vị trí của nút Yes trên trục Y
+let maxX = 400;
+let maxY = 400;
 let yesBtnMoves = 0;
 let showQuestionMark = false;
 
-// 🎁 Click hộp quà
+// Click hộp quà
 giftBox.addEventListener("click", () => {
   if (!gameSolved) {
     popup.classList.remove("hidden");
     popup.classList.add("popup");
 
+    // Reset vị trí và text ban đầu
     if (attempts < 10) {
       yesBtn.textContent = "yessss";
       noBtn.textContent = "naur";
@@ -39,11 +40,11 @@ giftBox.addEventListener("click", () => {
   }
 });
 
-// ❌ Nhấn nút No
+// Nhấn nút No
 noBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
 
-  // Reset yes/no text & position mỗi lần mở lại hộp
+  // Reset lại trạng thái popup
   attempts = 0;
   yesBtn.textContent = getRandomPhrase(phrasesYes);
   noBtn.textContent = getRandomPhrase(phrasesNo);
@@ -51,12 +52,11 @@ noBtn.addEventListener("click", () => {
   yesBtn.style.left = "";
   yesBtn.style.top = "";
 
-  // Tắt nút ẩn khi chọn sai số
   questionMark.classList.add("hidden");
   yesBtnMoves = 0;
 });
 
-// Di chuyển nút Yes
+// Né chuột
 yesBtn.addEventListener("mouseenter", () => {
   if (gameSolved) return;
   moveYesButton();
@@ -71,7 +71,6 @@ function moveYesButton() {
   yesBtnMoves++;
   attempts++;
 
-  // Di chuyển nút yes trong phạm vi màn hình
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
 
@@ -79,19 +78,16 @@ function moveYesButton() {
   yesBtn.style.left = `${safeX}px`;
   yesBtn.style.top = `${safeY}px`;
 
-  // Thay đổi text mỗi lần di chuyển
   updateButtonText();
 
-  // Hiện nút ẩn sau 10 lần di chuyển
   if (yesBtnMoves >= 10 && !showQuestionMark) {
     questionMark.classList.remove("hidden");
     showQuestionMark = true;
   }
 
-  // Nếu đã có dấu hỏi, kiểm tra nếu đã chọn sai số
   if (showQuestionMark && wrongAttempts > 0) {
     questionMark.classList.add("hidden");
-    yesBtnMoves = 0; // Reset lại đếm
+    yesBtnMoves = 0;
     showQuestionMark = false;
   }
 }
@@ -105,10 +101,10 @@ function getRandomPhrase(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// ❓ Mở minigame
+// Click dấu ?
 questionMark.addEventListener("click", () => {
   minigame.classList.remove("hidden");
-  renderMinigameNumbers(); // random lại
+  renderMinigameNumbers();
 });
 
 function renderMinigameNumbers() {
@@ -151,6 +147,7 @@ function handleCorrect() {
       popup.classList.add("hidden");
       minigame.classList.add("hidden");
       showBirthdayMessage();
+      showFlowerEffect(); // Thêm hoa rơi
     };
   });
 
@@ -164,7 +161,6 @@ function handleWrong() {
 
   wrongAttempts++;
 
-  // Nếu đã hiện dấu ? thì ẩn và reset attempts
   if (questionMark.classList.contains("hidden") && wrongAttempts > 0) {
     questionMark.classList.add("hidden");
     attempts = 0;
@@ -177,19 +173,19 @@ function handleWrong() {
   }, 1000);
 }
 
-// 🔽 Thu nhỏ/hiện lại minigame
+// Đóng/mở minigame
 closeMinigame.addEventListener("click", () => {
   const isHidden = minigame.classList.contains("hidden");
 
   if (isHidden) {
     minigame.classList.remove("hidden");
-    renderMinigameNumbers(); // random lại số
+    renderMinigameNumbers();
   } else {
     minigame.classList.add("hidden");
   }
 });
 
-// 🎉 Lời chúc
+// Lời chúc sinh nhật
 function showBirthdayMessage() {
   const msg = document.createElement("div");
   msg.textContent = "Chúc mừng sinh nhật! Mong bạn luôn hạnh phúc 🎂🎈";
@@ -207,11 +203,10 @@ function showBirthdayMessage() {
   msg.style.zIndex = 999;
   document.body.appendChild(msg);
 
-  // Vô hiệu hóa hộp quà sau khi hiện lời chúc
   giftBox.classList.add("hidden");
 }
 
-// 🖱️ Drag minigame (PC)
+// Drag minigame (PC)
 let isDragging = false;
 let offsetX = 0, offsetY = 0;
 
@@ -234,3 +229,4 @@ document.addEventListener("mousemove", (e) => {
     minigame.style.position = "absolute";
   }
 });
+
