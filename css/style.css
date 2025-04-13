@@ -237,12 +237,24 @@ body, button, p, h1, h2, h3 {
 }
 
 
-html, body {
-  -webkit-user-drag: none; /* Không cho kéo ảnh */
+* {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  touch-action: manipulation; /* Giảm delay tương tác trên mobile */
+
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+html, body {
+  -webkit-user-drag: none;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+button, a, div, span {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
