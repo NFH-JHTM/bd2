@@ -92,9 +92,8 @@ function moveYesButton() {
   const btnWidth = btnRect.width;
   const btnHeight = btnRect.height;
 
-  const isMobile = window.innerWidth < 768;
-  const maxMoveX = isMobile ? 100 : 400;
-  const maxMoveY = isMobile ? 100 : 400;
+  const maxMoveX = 200;
+  const maxMoveY = 200;
 
   const safeX = Math.random() * Math.min(popupWidth - btnWidth - 20, maxMoveX);
   const safeY = Math.random() * Math.min(popupHeight - btnHeight - 20, maxMoveY);
