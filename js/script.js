@@ -90,17 +90,27 @@ function moveYesButton() {
   const btnWidth = yesBtn.offsetWidth;
   const btnHeight = yesBtn.offsetHeight;
 
-  const limit = 250;
-
+  const limit = 400;
   const maxX = Math.min(limit, popupRect.width - btnWidth);
   const maxY = Math.min(limit, popupRect.height - btnHeight);
 
+  const minDistance = 80; // tăng khoảng cách để nó nhảy xa hơn
   let newX, newY;
-  const minDistance = 50; // khoảng cách tối thiểu giữa lần trước và lần mới
+  let tries = 0;
 
   do {
-    newX = Math.random() * maxX;
-    newY = Math.random() * maxY;
+    const directionX = Math.random() < 0.5 ? -1 : 1;
+    const directionY = Math.random() < 0.5 ? -1 : 1;
+
+    newX = lastX + directionX * (minDistance + Math.random() * (maxX - minDistance));
+    newY = lastY + directionY * (minDistance + Math.random() * (maxY - minDistance));
+
+    // Clamp để đảm bảo không bị vượt giới hạn
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+
+    tries++;
+    if (tries > 20) break; // tránh bị lặp vô hạn
   } while (
     Math.abs(newX - lastX) < minDistance &&
     Math.abs(newY - lastY) < minDistance
