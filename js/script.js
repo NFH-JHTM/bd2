@@ -86,15 +86,16 @@ function moveYesButton() {
     }
   }
 
-  const popupRect = popup.getBoundingClientRect();
   const btnWidth = yesBtn.offsetWidth;
   const btnHeight = yesBtn.offsetHeight;
 
-  const limit = 700;
-  const maxX = Math.min(limit, popupRect.width - btnWidth);
-  const maxY = Math.min(limit, popupRect.height - btnHeight);
+  const limitX = 250;
+  const limitY = 250;
 
-  const minDistance = 80; // tăng khoảng cách để nó nhảy xa hơn
+  const maxX = Math.min(limitX, window.innerWidth - btnWidth);
+  const maxY = Math.min(limitY, window.innerHeight - btnHeight);
+
+  const minDistance = 80;
   let newX, newY;
   let tries = 0;
 
@@ -105,12 +106,11 @@ function moveYesButton() {
     newX = lastX + directionX * (minDistance + Math.random() * (maxX - minDistance));
     newY = lastY + directionY * (minDistance + Math.random() * (maxY - minDistance));
 
-    // Clamp để đảm bảo không bị vượt giới hạn
     newX = Math.max(0, Math.min(newX, maxX));
     newY = Math.max(0, Math.min(newY, maxY));
 
     tries++;
-    if (tries > 20) break; // tránh bị lặp vô hạn
+    if (tries > 20) break;
   } while (
     Math.abs(newX - lastX) < minDistance &&
     Math.abs(newY - lastY) < minDistance
@@ -119,7 +119,7 @@ function moveYesButton() {
   lastX = newX;
   lastY = newY;
 
-  yesBtn.style.position = "absolute";
+  yesBtn.style.position = "fixed"; // đổi thành fixed để bay khắp màn hình
   yesBtn.style.left = `${newX}px`;
   yesBtn.style.top = `${newY}px`;
 
