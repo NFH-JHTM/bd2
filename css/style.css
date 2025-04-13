@@ -159,6 +159,67 @@ body, button, p, h1, h2, h3 {
   animation: floating 3s ease-in-out infinite;
 }
 
+.gallery {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 998;
+}
+
+.gallery-thumb {
+  width: 120px;
+  height: auto;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.gallery-thumb:hover {
+  transform: scale(1.1);
+}
+
+/* Zoom viewer */
+#imageViewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+#imageViewer img {
+  max-width: 80%;
+  max-height: 70%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+
+#closeViewer, #downloadBtn {
+  background: #fff;
+  border: none;
+  font-size: 1.5rem;
+  margin: 5px 10px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#closeViewer:hover, #downloadBtn:hover {
+  background: #ffe6f0;
+}
+
 * {
   user-select: none; 
 }
