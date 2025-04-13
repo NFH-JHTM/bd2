@@ -10,39 +10,58 @@ const closeMinigame = document.getElementById("closeMinigame");
 const minigameHeader = document.getElementById("minigameHeader");
 
 let attempts = 0;
-let phrasesYes = ["yessss", "deal", "say less", "bet", "chắc lun"];
-let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo"];
+let phrasesYes = ["yessss", "deal", "say less", "bet", "chắc lun", "smash that", "open up", "send it", "aye go!", "no cap", "do ittt"];
+let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo", "miss me", "hard pass", "not today", "keep dreamin", "in ur dreamz", "nahhh"];
 let targetNumber = 143;
 let wrongAttempts = 0;
 let gameSolved = false;
+let maxX = 400;
+let maxY = 400;
+let yesBtnMoves = 0;
+let showQuestionMark = false;
 
-// 🎁 Click hộp quà
+// Click hộp quà
 giftBox.addEventListener("click", () => {
-  popup.classList.remove("hidden");
-  popup.classList.add("popup");
+  if (!gameSolved) {
+    popup.classList.remove("hidden");
+    popup.classList.add("popup");
 
-  if (!gameSolved && attempts < 6) {
-    yesBtn.textContent = "yessss";
-    noBtn.textContent = "naur";
-    yesBtn.style.position = "static";
-    yesBtn.style.left = "";
-    yesBtn.style.top = "";
+    // Reset vị trí và text ban đầu
+    if (attempts < 10) {
+      yesBtn.textContent = "yessss";
+      noBtn.textContent = "naur";
+      yesBtn.style.position = "static";
+      yesBtn.style.left = "";
+      yesBtn.style.top = "";
+    }
+
+    resultText.textContent = "";
+    resultText.style.fontSize = "16px";
   }
-
-  resultText.textContent = "";
-  resultText.style.fontSize = "16px";
 });
 
-// ❌ Nhấn nút No
+// Nhấn nút No
 noBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
+
+  // Reset lại trạng thái popup
+  attempts = 0;
+  yesBtn.textContent = getRandomPhrase(phrasesYes);
+  noBtn.textContent = getRandomPhrase(phrasesNo);
+  yesBtn.style.position = "static";
+  yesBtn.style.left = "";
+  yesBtn.style.top = "";
+
+  questionMark.classList.add("hidden");
+  yesBtnMoves = 0;
 });
 
-// ✅ Nút Yes né chuột
+// Né chuột
 yesBtn.addEventListener("mouseenter", () => {
   if (gameSolved) return;
   moveYesButton();
 });
+
 yesBtn.addEventListener("touchstart", () => {
   if (gameSolved) return;
   moveYesButton();
@@ -51,16 +70,25 @@ yesBtn.addEventListener("touchstart", () => {
 function moveYesButton() {
   attempts++;
 
-  // Giới hạn phạm vi di chuyển của nút yes
-  const maxX = 400; // 500 - 50
-  const maxY = 400;
+  const popupRect = popup.getBoundingClientRect();
+  const btnRect = yesBtn.getBoundingClientRect();
+
+  const popupWidth = popupRect.width;
+  const popupHeight = popupRect.height;
+
+  const btnWidth = btnRect.width;
+  const btnHeight = btnRect.height;
+
+  // Giới hạn tối đa để nút không ra ngoài popup
+  const maxX = popupWidth - btnWidth - 20; // chừa 1 chút padding
+  const maxY = popupHeight - btnHeight - 20;
 
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
 
   yesBtn.style.position = "absolute";
-  yesBtn.style.left = ${safeX}px;
-  yesBtn.style.top = ${safeY}px;
+  yesBtn.style.left = `${safeX}px`;
+  yesBtn.style.top = `${safeY}px`;
 
   updateButtonText();
 
@@ -71,16 +99,18 @@ function moveYesButton() {
 
 
 function updateButtonText() {
-  if (attempts < phrasesYes.length) {
-    yesBtn.textContent = phrasesYes[attempts % phrasesYes.length];
-    noBtn.textContent = phrasesNo[attempts % phrasesNo.length];
-  }
+  yesBtn.textContent = getRandomPhrase(phrasesYes);
+  noBtn.textContent = getRandomPhrase(phrasesNo);
 }
 
-// ❓ Mở minigame
+function getRandomPhrase(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Click dấu ?
 questionMark.addEventListener("click", () => {
   minigame.classList.remove("hidden");
-  renderMinigameNumbers(); // luôn random lại
+  renderMinigameNumbers();
 });
 
 function renderMinigameNumbers() {
@@ -118,60 +148,67 @@ function handleCorrect() {
   noBtn.style.position = "static";
   gameSolved = true;
 
+  // Ẩn dấu ? sau khi win
+  questionMark.classList.add("hidden");
+  showQuestionMark = false;
+
   [yesBtn, noBtn].forEach(btn => {
     btn.onclick = () => {
       popup.classList.add("hidden");
       minigame.classList.add("hidden");
       showBirthdayMessage();
+      showFlowerEffect(); // Thêm hoa rơi
     };
   });
 
   closeMinigame.classList.remove("hidden");
+
+  // Tắt minigame sau 5 giây
+  setTimeout(() => {
+    minigame.classList.add("hidden");
+  }, 5000);
 }
+
 
 function handleWrong() {
   resultText.textContent = "Sai rùi 😢";
   resultText.style.color = "red";
-
   minigame.classList.add("hidden");
 
   wrongAttempts++;
-  if (wrongAttempts >= 5) {
-    questionMark.classList.remove("hidden");
-    wrongAttempts = 0;
-  } else {
-    // Tạm thời ẩn dấu hỏi chấm cho đến lần sau
-    questionMark.classList.add("hidden");
-  }
+
+  // Luôn ẩn dấu ? nếu chọn sai
+  questionMark.classList.add("hidden");
+  showQuestionMark = false;       // ✅ Reset flag
+  yesBtnMoves = 0;                // ✅ Reset đếm di chuyển
 
   setTimeout(() => {
     popup.classList.add("hidden");
     yesBtn.style.position = "static";
-    yesBtn.textContent = "yessss";
-    noBtn.textContent = "naur";
-    attempts = 0;
-    resultText.textContent = "";
+    updateButtonText();
   }, 1000);
 }
 
-// 🔽 Thu nhỏ/hiện lại minigame
+
+// Đóng/mở minigame
 closeMinigame.addEventListener("click", () => {
   const isHidden = minigame.classList.contains("hidden");
 
   if (isHidden) {
     minigame.classList.remove("hidden");
-    renderMinigameNumbers(); // random lại số
+    renderMinigameNumbers();
   } else {
-    minigame.classList.add("hidden"); // chỉ ẩn minigame, không ảnh hưởng nút ?
+    minigame.classList.add("hidden");
   }
 });
 
-// 🎉 Lời chúc
+// Lời chúc sinh nhật
 function showBirthdayMessage() {
   const msg = document.createElement("div");
-  msg.textContent = "Chúc mừng sinh nhật! Mong bạn luôn hạnh phúc 🎂🎈";
-  msg.style.position = "absolute";
-  msg.style.top = "55%";
+  msg.textContent = "Chúc mừng sinh nhật b nhaaaa, chúc bạn tuổi mới đạt được nhiều thành công trong cuộc sống này và năm nay là b đã 18 tuổi r đấy, có thể làm những điều mình thích mà không phải lo gì hết nè. Năm nay phải cố gắng đậu NV1 nha b, rồi tìm được eboy của mình nữa 🎂🎉";
+
+  msg.style.position = "fixed";
+  msg.style.top = "50%";
   msg.style.left = "50%";
   msg.style.transform = "translate(-50%, -50%)";
   msg.style.background = "#fff0f5";
@@ -182,10 +219,52 @@ function showBirthdayMessage() {
   msg.style.wordBreak = "break-word";
   msg.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
   msg.style.zIndex = 999;
+  msg.classList.add("floating-msg");
+
   document.body.appendChild(msg);
+  giftBox.classList.add("hidden");
+
+  // Gallery
+  const gallery = document.createElement("div");
+  gallery.className = "gallery";
+
+  const images = [
+    "images/photo1.webp",
+    "images/photo2.webp",
+    "images/photo3.webp"
+  ];
+
+  images.forEach(src => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.className = "gallery-thumb";
+    img.onclick = () => openImageViewer(src);
+    gallery.appendChild(img);
+  });
+
+  document.body.appendChild(gallery);
 }
 
-// 🖱️ Drag minigame (PC)
+// Viewer mở ảnh
+function openImageViewer(src) {
+  const viewer = document.getElementById("imageViewer");
+  const viewerImg = document.getElementById("viewerImg");
+  const downloadBtn = document.getElementById("downloadBtn");
+
+  viewer.classList.add("active");
+  viewerImg.src = src;
+  downloadBtn.href = src;
+}
+
+document.getElementById("closeViewer").onclick = () => {
+  document.getElementById("imageViewer").classList.remove("active");
+};
+
+
+
+
+
+// Drag minigame (PC)
 let isDragging = false;
 let offsetX = 0, offsetY = 0;
 
@@ -203,8 +282,8 @@ document.addEventListener("mouseup", () => {
 
 document.addEventListener("mousemove", (e) => {
   if (isDragging) {
-    minigame.style.left = ${e.clientX - offsetX}px;
-    minigame.style.top = ${e.clientY - offsetY}px;
+    minigame.style.left = `${e.clientX - offsetX}px`;
+    minigame.style.top = `${e.clientY - offsetY}px`;
     minigame.style.position = "absolute";
   }
 });
