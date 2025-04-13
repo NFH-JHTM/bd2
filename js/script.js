@@ -137,6 +137,10 @@ function handleCorrect() {
   noBtn.style.position = "static";
   gameSolved = true;
 
+  // Ẩn dấu ? sau khi win
+  questionMark.classList.add("hidden");
+  showQuestionMark = false;
+
   [yesBtn, noBtn].forEach(btn => {
     btn.onclick = () => {
       popup.classList.add("hidden");
@@ -147,7 +151,13 @@ function handleCorrect() {
   });
 
   closeMinigame.classList.remove("hidden");
+
+  // Tắt minigame sau 5 giây
+  setTimeout(() => {
+    minigame.classList.add("hidden");
+  }, 5000);
 }
+
 
 function handleWrong() {
   resultText.textContent = "Sai rùi 😢";
