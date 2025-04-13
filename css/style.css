@@ -285,7 +285,7 @@ button, a, div, span {
 
   /* Birthday message: Rộng hơn thay vì dài ra */
   .floating-msg {
-    font-size: 0.6rem;
+    font-size: 0.2rem;
     max-width: 200vw;
     word-wrap: break-word;
     text-align: left;
@@ -330,8 +330,8 @@ button, a, div, span {
 
   /* Giới hạn chiều rộng của lời chúc trên mobile */
   .floating-msg {
-    font-size: 0.6rem;
-    max-width: 150vw;
+    font-size: 0.2rem;
+    max-width: 200vw;
   }
 
   /* Sửa lại font-size của số trong minigame */
