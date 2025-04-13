@@ -156,68 +156,76 @@ body, button, p, h1, h2, h3 {
 }
 
 .floating-msg {
-  animation: floating 3s ease-in-out infinite;
+  animation: floaty 3s ease-in-out infinite;
+  font-family: 'Itim', cursive;
+  text-align: center;
+  color: #ff69b4;
+}
+
+@keyframes floaty {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-10px);
+  }
 }
 
 .gallery {
-  margin-top: 30px;
   display: flex;
   justify-content: center;
-  gap: 15px;
   flex-wrap: wrap;
-  position: relative;
-  z-index: 998;
+  margin-top: 30px;
+  gap: 15px;
 }
 
 .gallery-thumb {
   width: 120px;
-  height: auto;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   cursor: pointer;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
 }
-
 .gallery-thumb:hover {
   transform: scale(1.1);
 }
 
-/* Zoom viewer */
 #imageViewer {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0,0,0,0.85);
   display: none;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
   z-index: 1000;
 }
 
-#imageViewer img {
-  max-width: 80%;
-  max-height: 70%;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 15px rgba(255,255,255,0.5);
+#imageViewer.active {
+  display: flex;
 }
 
-#closeViewer, #downloadBtn {
+#viewerImg {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+#closeViewer,
+#downloadBtn {
   background: #fff;
   border: none;
-  font-size: 1.5rem;
-  margin: 5px 10px;
-  padding: 10px 15px;
-  border-radius: 10px;
+  font-size: 1.2rem;
+  padding: 8px 16px;
+  margin: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
-}
-
-#closeViewer:hover, #downloadBtn:hover {
-  background: #ffe6f0;
 }
 
 * {
