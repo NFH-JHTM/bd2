@@ -10,8 +10,32 @@ const closeMinigame = document.getElementById("closeMinigame");
 const minigameHeader = document.getElementById("minigameHeader");
 
 let attempts = 0;
-let phrasesYes = ["yessss", "deal", "say less", "bet", "chắc lun"];
-let phrasesNo = ["naur", "bruh", "nah fam", "outtt", "noooo"];
+let phrasesYes = [
+  "yessss", 
+  "deal", 
+  "say less", 
+  "bet", 
+  "chắc lun",
+  "smash that", 
+  "open up", 
+  "send it", 
+  "aye go!", 
+  "no cap", 
+  "do ittt"
+];
+let phrasesNo = [
+  "naur", 
+  "bruh", 
+  "nah fam", 
+  "outtt", 
+  "noooo",
+  "miss me", 
+  "hard pass", 
+  "not today", 
+  "keep dreamin", 
+  "in ur dreamz", 
+  "nahhh"
+];
 let targetNumber = 143;
 let wrongAttempts = 0;
 let gameSolved = false;
@@ -68,7 +92,6 @@ function moveYesButton() {
     questionMark.classList.remove("hidden");
   }
 }
-
 
 function updateButtonText() {
   if (attempts < phrasesYes.length) {
