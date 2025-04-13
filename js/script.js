@@ -10,48 +10,30 @@ const closeMinigame = document.getElementById("closeMinigame");
 const minigameHeader = document.getElementById("minigameHeader");
 
 let attempts = 0;
-let phrasesYes = [
-  "yessss", 
-  "deal", 
-  "say less", 
-  "bet", 
-  "chắc lun",
-  "smash that", 
-  "open up", 
-  "send it", 
-  "aye go!", 
-  "no cap", 
-  "do ittt"
-];
-let phrasesNo = [
-  "naur", 
-  "bruh", 
-  "nah fam", 
-  "outtt", 
-  "noooo",
-  "miss me", 
-  "hard pass", 
-  "not today", 
-  "keep dreamin", 
-  "in ur dreamz", 
-  "nahhh"
-];
-let targetNumber = 143;
 let wrongAttempts = 0;
 let gameSolved = false;
+
+const phrasesYes = [
+  "yessss", "deal", "say less", "bet", "chắc lun",
+  "smash that", "open up", "send it", "aye go!", "no cap", "do ittt"
+];
+const phrasesNo = [
+  "naur", "bruh", "nah fam", "outtt", "noooo",
+  "miss me", "hard pass", "not today", "keep dreamin", "in ur dreamz", "nahhh"
+];
+const targetNumber = 143;
 
 // 🎁 Click hộp quà
 giftBox.addEventListener("click", () => {
   popup.classList.remove("hidden");
   popup.classList.add("popup");
 
-  if (!gameSolved && attempts < 6) {
-    yesBtn.textContent = "yessss";
-    noBtn.textContent = "naur";
-    yesBtn.style.position = "static";
-    yesBtn.style.left = "";
-    yesBtn.style.top = "";
-  }
+  // Luôn reset text & vị trí mỗi lần mở
+  attempts = 0;
+  updateButtonText();
+  yesBtn.style.position = "static";
+  yesBtn.style.left = "";
+  yesBtn.style.top = "";
 
   resultText.textContent = "";
   resultText.style.fontSize = "16px";
@@ -60,6 +42,11 @@ giftBox.addEventListener("click", () => {
 // ❌ Nhấn nút No
 noBtn.addEventListener("click", () => {
   popup.classList.add("hidden");
+  attempts = 0;
+  updateButtonText();
+  yesBtn.style.position = "static";
+  yesBtn.style.left = "";
+  yesBtn.style.top = "";
 });
 
 // ✅ Nút Yes né chuột
@@ -75,10 +62,8 @@ yesBtn.addEventListener("touchstart", () => {
 function moveYesButton() {
   attempts++;
 
-  // Giới hạn phạm vi di chuyển của nút `yes`
-  const maxX = 400; // 500 - 50
+  const maxX = 400;
   const maxY = 400;
-
   const safeX = Math.random() * maxX;
   const safeY = Math.random() * maxY;
 
@@ -94,16 +79,16 @@ function moveYesButton() {
 }
 
 function updateButtonText() {
-  if (attempts < phrasesYes.length) {
-    yesBtn.textContent = phrasesYes[attempts % phrasesYes.length];
-    noBtn.textContent = phrasesNo[attempts % phrasesNo.length];
-  }
+  const randYes = phrasesYes[Math.floor(Math.random() * phrasesYes.length)];
+  const randNo = phrasesNo[Math.floor(Math.random() * phrasesNo.length)];
+  yesBtn.textContent = randYes;
+  noBtn.textContent = randNo;
 }
 
 // ❓ Mở minigame
 questionMark.addEventListener("click", () => {
   minigame.classList.remove("hidden");
-  renderMinigameNumbers(); // luôn random lại
+  renderMinigameNumbers();
 });
 
 function renderMinigameNumbers() {
@@ -155,16 +140,14 @@ function handleCorrect() {
 function handleWrong() {
   resultText.textContent = "Sai rùi 😢";
   resultText.style.color = "red";
-
   minigame.classList.add("hidden");
+
+  if (!questionMark.classList.contains("hidden")) return;
 
   wrongAttempts++;
   if (wrongAttempts >= 5) {
     questionMark.classList.remove("hidden");
     wrongAttempts = 0;
-  } else {
-    // Tạm thời ẩn dấu hỏi chấm cho đến lần sau
-    questionMark.classList.add("hidden");
   }
 
   setTimeout(() => {
@@ -173,7 +156,7 @@ function handleWrong() {
     yesBtn.textContent = "yessss";
     noBtn.textContent = "naur";
     attempts = 0;
-    resultText.textContent = "";
+    updateButtonText();
   }, 1000);
 }
 
@@ -183,9 +166,9 @@ closeMinigame.addEventListener("click", () => {
 
   if (isHidden) {
     minigame.classList.remove("hidden");
-    renderMinigameNumbers(); // random lại số
+    renderMinigameNumbers();
   } else {
-    minigame.classList.add("hidden"); // chỉ ẩn minigame, không ảnh hưởng nút ?
+    minigame.classList.add("hidden");
   }
 });
 
