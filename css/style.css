@@ -12,10 +12,10 @@ body {
   cursor: pointer;
   position: absolute;
   left: 50%;
-  top: 45%;
-  transform: translate(-50%, -50%);
+  top: 50%;
+  transform: translate(-50%, -50%); /* Căn giữa hộp quà */
   transition: transform 0.4s;
-  width: 20vw; /* Thêm bề rộng cho hộp quà */
+  width: 25vw; /* Tăng kích thước hộp quà */
 }
 
 .bounce {
