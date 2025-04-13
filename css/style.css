@@ -261,11 +261,6 @@ button, a, div, span {
 
 /* Responsive for Mobile Devices */
 @media (max-width: 768px) {
-  /* Hộp quà */
-  .gift {
-    font-size: 80px;
-  }
-
   /* Popup */
   .popup, .minigame {
     padding: 20px;
@@ -290,8 +285,8 @@ button, a, div, span {
 
   /* Birthday message: Rộng hơn thay vì dài ra */
   .floating-msg {
-    font-size: 1.2rem;
-    max-width: 80vw;
+    font-size: 1rem;
+    max-width: 100vw;
     word-wrap: break-word;
     text-align: left;
   }
@@ -327,8 +322,8 @@ button, a, div, span {
 
   /* Gallery cho màn hình cực nhỏ */
   .gallery-thumb {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
   }
 
   /* Tăng kích thước hình ảnh khi hover trên mobile */
@@ -339,7 +334,7 @@ button, a, div, span {
   /* Giới hạn chiều rộng của lời chúc trên mobile */
   .floating-msg {
     font-size: 1rem;
-    max-width: 90vw;
+    max-width: 100vw;
   }
 
   /* Sửa lại font-size của số trong minigame */
