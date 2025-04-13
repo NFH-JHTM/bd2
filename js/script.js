@@ -142,12 +142,16 @@ function handleWrong() {
   resultText.style.color = "red";
   minigame.classList.add("hidden");
 
-  if (!questionMark.classList.contains("hidden")) return;
-
-  wrongAttempts++;
-  if (wrongAttempts >= 5) {
-    questionMark.classList.remove("hidden");
+  // Nếu đã hiện dấu ? => ẩn lại + reset wrongAttempts
+  if (!questionMark.classList.contains("hidden")) {
+    questionMark.classList.add("hidden");
     wrongAttempts = 0;
+  } else {
+    wrongAttempts++;
+    if (wrongAttempts >= 10) {
+      questionMark.classList.remove("hidden");
+      wrongAttempts = 0;
+    }
   }
 
   setTimeout(() => {
@@ -159,7 +163,6 @@ function handleWrong() {
     updateButtonText();
   }, 1000);
 }
-
 // 🔽 Thu nhỏ/hiện lại minigame
 closeMinigame.addEventListener("click", () => {
   const isHidden = minigame.classList.contains("hidden");
