@@ -1,8 +1,7 @@
-/* Toàn bộ trang web */
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Itim', cursive; /* Sử dụng font Itim cho toàn bộ web */
+  font-family: 'Quicksand', sans-serif;
   background: #fffbe9;
   overflow: hidden;
 }
@@ -12,10 +11,9 @@ body {
   cursor: pointer;
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%); /* Căn giữa hộp quà */
+  top: 45%;
+  transform: translate(-50%, -50%);
   transition: transform 0.4s;
-  width: 25vw; /* Tăng kích thước hộp quà */
 }
 
 .bounce {
@@ -94,6 +92,57 @@ body {
   z-index: 0;
 }
 
+.popup {
+  animation: scaleIn 0.4s ease;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.6) translate(-50%, -50%);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+body, button, p, h1, h2, h3 {
+  font-family: 'Itim', cursive;
+}
+
+.minigame {
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.minigame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  background: #ffc1e3;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: move;
+}
+
+#closeMinigame {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.petalCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+}
+
 @keyframes floating {
   0% {
     transform: translate(-50%, -50%) translateY(0);
@@ -131,15 +180,14 @@ body {
 }
 
 .gallery-thumb {
-  width: 150px;  /* Cập nhật kích thước hình ảnh */
-  height: 150px; /* Cập nhật kích thước hình ảnh */
+  width: 120px;
+  height: 120px;
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: transform 0.2s ease;
 }
-
 .gallery-thumb:hover {
   transform: scale(1.1);
 }
@@ -188,6 +236,7 @@ body {
   z-index: 1000;
 }
 
+
 * {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -208,59 +257,4 @@ button, a, div, span {
   -webkit-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-}
-
-/* Responsive Styles */
-@media screen and (max-width: 768px) {
-  .gift {
-    font-size: 140px; /* Tăng kích thước hộp quà trên mobile */
-    width: 35vw; /* Hộp quà sẽ to hơn trên mobile */
-  }
-
-  .popup {
-    width: 80vw; /* Giãn rộng khung câu chúc */
-    padding: 25px;
-  }
-
-  .gallery-thumb {
-    width: 170px;  /* Giảm kích thước hình ảnh trên mobile */
-    height: 170px;
-  }
-
-  .floating-msg {
-    font-size: 18px; /* Chữ chúc nhỏ lại trên mobile */
-  }
-
-  .gallery {
-    gap: 10px; /* Giảm khoảng cách giữa các hình ảnh */
-  }
-
-  .popup .buttons button {
-    font-size: 0.9rem; /* Chỉnh kích thước nút cho vừa với mobile */
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .gift {
-    font-size: 180px; /* Tăng kích thước hộp quà trên mobile nhỏ */
-    width: 45vw; /* Hộp quà sẽ to hơn nữa trên mobile nhỏ */
-  }
-
-  .popup {
-    width: 90vw; /* Giãn rộng khung câu chúc hơn trên mobile nhỏ */
-    padding: 20px;
-  }
-
-  .gallery-thumb {
-    width: 120px;
-    height: 120px;
-  }
-
-  .floating-msg {
-    font-size: 16px;
-  }
-
-  .popup .buttons button {
-    padding: 8px 20px;
-  }
 }
